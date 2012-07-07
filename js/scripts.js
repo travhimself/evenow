@@ -9,7 +9,7 @@ $(document).ready( function() {
     var timeminutes = $('.time .minutes span');
     var timeseconds = $('.time .seconds span');
     var timemonth = $('.date .month span');
-    var timedate = $('.date .date span');
+    var timedate = $('.date .day span');
     var timeyear = $('.date .year span');
     var rendertime = function() {
         now.add('s', 1);
@@ -26,5 +26,20 @@ $(document).ready( function() {
 
     // update time every 1 second
     setInterval(rendertime, 1000);
+
+    // scale type to fit containers
+    
+
+    var scaletypeall = function() {
+        $('.scaletype').each( function(i) {
+            $(this).typescale();
+        });
+    };
+
+    scaletypeall();
+
+    $(window).resize(function() {
+        scaletypeall();
+    });
 
 });

@@ -4,6 +4,8 @@
 
 body {
     font-family: 'din', 'helvetica neue', 'helvetica', 'arial', sans-serif;
+    text-transform: uppercase;
+    line-height: 1;
     color: rgba(255, 255, 255, 1.0);
     background: rgba(0, 0, 0, 1.0) url(../img/bg1.png) 50% 0 no-repeat;
 
@@ -11,31 +13,13 @@ body {
         background: rgba(0, 0, 0, .2);
         margin: 2em auto;
 
-        .time {
-            font-size: 4em;
-            font-weight: 800;
-
-            span {
-                
-                &.hours {
-
-                }
-
-                &.minutes {
-
-                }
-
-                &.seconds {
-                    font-size: .5em;
-                }
-            }
+        h2 {
+            text-transform: uppercase;
+            margin: 0;
         }
 
-        .date {
-
-            span {
-
-            }
+        .scaletype {
+            display: inline-block;
         }
     }
 }

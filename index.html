@@ -12,7 +12,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/skeleton.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet/less" href="css/styles.less">
@@ -34,16 +34,18 @@
         <div class="columns sixteen">
 
             <div class="row">
-            	<div class="columns six alpha">
-            		<div class="time">
+            	<div class="columns eight alpha datetime">
+            		<div class="time scaletype">
 		                <span class="hours"><span></span></span><span class="minutes">:<span></span></span><span class="seconds">:<span></span></span>
 		            </div>
-
-		            <div class="date">
-		                <span class="month"><span></span></span><span class="date"><span></span></span><span class="year"><span></span></span>
+		            <div class="date scaletype">
+		                <span class="day"><span></span></span> <span class="month"><span></span></span> <span class="year"><span></span></span>
 		            </div>
             	</div>
-            	<div class="columns six omega"></div>
+            	<div class="columns eight omega serverstatus">
+            		<div class="scaletype">Tranquility Status</div>
+            		<div class="scaletype">Online</div>
+            	</div>
             </div>
 
         </div>
@@ -53,6 +55,7 @@
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/less.min.js"></script>
     <script type="text/javascript" src="js/moment.js"></script>
+    <script type="text/javascript" src="js/typescale.js"></script>
     <script type="text/javascript" src="js/scripts.js"></script>
 
 </body>
