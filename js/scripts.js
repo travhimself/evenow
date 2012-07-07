@@ -27,9 +27,7 @@ $(document).ready( function() {
     // update time every 1 second
     setInterval(rendertime, 1000);
 
-    // scale type to fit containers
-    
-
+    // dynamically scale type to fit containers
     var scaletypeall = function() {
         $('.scaletype').each( function(i) {
             $(this).typescale();
