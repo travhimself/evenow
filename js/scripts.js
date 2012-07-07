@@ -27,23 +27,4 @@ $(document).ready( function() {
     // update time every 1 second
     setInterval(rendertime, 1000);
 
-    // VALIGN
-    // set up calculations
-    var container = $('.container');
-    var clockheight;
-    var windowheight;
-    var offset;
-    var verticalalign = function() {
-        clockheight = container.height();
-        windowheight = $(window).height();
-        offset = (windowheight - clockheight) / 2;
-        container.css('margin-top', offset + 'px');
-    };
-    verticalalign();
-
-    // realign on window resize
-    $(window).resize(function() {
-        verticalalign();
-    });
-
 });
