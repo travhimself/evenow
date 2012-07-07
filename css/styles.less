@@ -1,10 +1,17 @@
+/*
+ Core Styles
+ * * * * * *  * * * * * * * * * */
+
 body {
+    font-family: 'din', 'helvetica neue', 'helvetica', 'arial', sans-serif;
+    color: rgba(255, 255, 255, 1.0);
+    background: rgba(0, 0, 0, 1.0) url(../img/bg1.png) 50% 0 no-repeat;
 
     .container {
-        text-align: center;
+        background: rgba(0, 0, 0, .2);
+        margin: 2em auto;
 
         .time {
-            font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
             font-size: 4em;
             font-weight: 800;
 
@@ -32,3 +39,9 @@ body {
         }
     }
 }
+
+/*
+ Mixins, Vars, Other
+ * * * * * *  * * * * * * * * * */
+
+@font-face { font-family: din; src: url(din.woff); } 
