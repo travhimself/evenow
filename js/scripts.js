@@ -33,7 +33,7 @@ $(document).ready( function() {
             $(this).typescale();
         });
     };
-
+    
     scaletypeall();
 
     $(window).resize(function() {
