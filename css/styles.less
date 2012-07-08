@@ -5,29 +5,33 @@
 body {
     font-family: 'din', 'helvetica neue', 'helvetica', 'arial', sans-serif;
     text-transform: uppercase;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, .1);
     line-height: 1;
     color: rgba(255, 255, 255, 1.0);
     background: rgba(0, 0, 0, 1.0) url(../img/bg2.png) 50% 0 no-repeat;
 
     .container {
-        background: rgba(0, 0, 0, .4);
-        // background: rgba(0, 0, 0, .01) url(../img/grid.png) 0 0 repeat;
+        
         margin: 2em auto;
+        padding-top: 2em;
 
         .scaletype {
             display: inline-block;
         }
 
-        .alpha {
+        .alpha, .omega {
             text-align: right;
-        }
-
-        .omega {
-            text-align: left;
+            padding: 20px;
+            background: rgba(0, 0, 0, .4);
+            // border-right: 5px solid rgba(255, 255, 255, 1.0);
         }
 
         .block {
             margin-bottom: 20px;
+
+            &:last-of-type {
+                margin-bottom: 0;
+            }
 
             .label {
                 font-size: 36px;
@@ -55,6 +59,12 @@ body {
         }
     }
 }
+
+/*
+ Mobile Styles
+ * * * * * *  * * * * * * * * * */
+
+
 
 /*
  Mixins, Vars, Other
