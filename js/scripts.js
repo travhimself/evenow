@@ -28,16 +28,16 @@ $(document).ready( function() {
     setInterval(rendertime, 1000);
 
     // dynamically scale type to fit containers
-    var scaletypeall = function() {
-        $('.scaletype').each( function(i) {
-            $(this).typescale();
-        });
-    };
+    // var scaletypeall = function() {
+    //     $('.scaletype').each( function(i) {
+    //         $(this).typescale();
+    //     });
+    // };
     
-    scaletypeall();
+    // scaletypeall();
 
-    $(window).resize(function() {
-        scaletypeall();
-    });
+    // $(window).resize(function() {
+    //     scaletypeall();
+    // });
 
 });

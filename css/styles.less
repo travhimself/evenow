@@ -7,10 +7,10 @@ body {
     text-transform: uppercase;
     line-height: 1;
     color: rgba(255, 255, 255, 1.0);
-    background: rgba(0, 0, 0, 1.0) url(../img/bg1.png) 50% 0 no-repeat;
+    background: rgba(0, 0, 0, 1.0) url(../img/bg2.png) 50% 0 no-repeat;
 
     .container {
-        background: rgba(0, 0, 0, .01);
+        background: rgba(0, 0, 0, .4);
         // background: rgba(0, 0, 0, .01) url(../img/grid.png) 0 0 repeat;
         margin: 2em auto;
 
@@ -18,39 +18,57 @@ body {
             display: inline-block;
         }
 
-        .block.major {
-            font-size: 96px;
+        .alpha {
+            text-align: right;
         }
 
-        .block.minor {
-            font-size: 36px;
+        .omega {
+            text-align: left;
         }
 
-        .time {
+        .block {
+            margin-bottom: 20px;
 
-        }
-
-        .date {
-
-        }
-
-        .serverstatus {
+            .date {
+                font-size: 18px;
+            }
 
             .label {
-
+                font-size: 36px;
             }
 
             .value {
-
+                font-size: 96px;
             }
-        }
 
-        .kills {
+            ul.list {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                list-style-type: none;
 
-        }
+                li {
+                    width: 100%;
+                    overflow: hidden;
 
-        .industry {
+                    .label {
+                        float: left;
+                        width: 60%;
+                        font-size: 24px;
+                    }
 
+                    .value {
+                        float: left;
+                        width: 40%;
+                        text-align: right;
+                        font-size: 24px;
+
+                        span {
+                            font-size: 14px;
+                        }
+                    }
+                }
+            }
         }
     }
 }
