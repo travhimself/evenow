@@ -29,10 +29,6 @@ body {
         .block {
             margin-bottom: 20px;
 
-            .date {
-                font-size: 18px;
-            }
-
             .label {
                 font-size: 36px;
             }
@@ -41,32 +37,19 @@ body {
                 font-size: 96px;
             }
 
-            ul.list {
-                margin: 0;
-                padding: 0;
-                list-style: none;
-                list-style-type: none;
+            &.datetime {
+                position: relative;
 
-                li {
-                    width: 100%;
-                    overflow: hidden;
+                .time {
+                    margin-right: 20px;
+                }
 
-                    .label {
-                        float: left;
-                        width: 60%;
-                        font-size: 24px;
-                    }
-
-                    .value {
-                        float: left;
-                        width: 40%;
-                        text-align: right;
-                        font-size: 24px;
-
-                        span {
-                            font-size: 14px;
-                        }
-                    }
+                .date {
+                    .rotate(-90deg);
+                    position: absolute;
+                    bottom: 40px;
+                    right: -27px;
+                    font-size: 18px;
                 }
             }
         }
@@ -78,3 +61,11 @@ body {
  * * * * * *  * * * * * * * * * */
 
 @font-face { font-family: din; src: url(din.woff); } 
+
+.rotate(@x) {
+    -webkit-transform: rotate(@x);
+       -moz-transform: rotate(@x);
+        -ms-transform: rotate(@x);
+         -o-transform: rotate(@x);
+            transform: rotate(@x);
+}
