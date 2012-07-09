@@ -1,0 +1,12 @@
+{
+    'name': 'evenow',
+    'author': 'travhimself',
+    'description': 'realtime eveonline dashboard',
+    'version': '0.0.1',
+    'dependencies': {
+        'connect': '1.8.x',
+        'express': '2.5.x'
+    },
+    'engine': '0.8.1',
+    'main': 'server.js'
+}
