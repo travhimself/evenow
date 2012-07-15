@@ -1,70 +1,51 @@
 $(document).ready( function() {
 
-    // TIME
-
     // set up socket.io connection
     var socket = io.connect("http://localhost:1111");
 
+    // warning container
+    var warningcontainer = $(".warning");
+
+    //////////////////////////////////////////////////////////////////
+    // TIME
+
+    // vars
+    var now;
+    var timehours = $('.time .hours span');
+    var timeminutes = $('.time .minutes span');
+    var timeseconds = $('.time .seconds span');
+    var timemonth = $('.date .month span');
+    var timedate = $('.date .day span');
+    var timeyear = $('.date .year span');
+
     // listen for updatetime event from the server
     socket.on("updatetime", function (data) {
-        // console.log(data.time);
+        // update the moment
+        now = moment.utc(data.dateString);
+        // display a warning if using server time as fallback
+        if (data.warning) {
+            warningcontainer.text(data.warning);
+            warningcontainer.css("visibility", "visible");
+        };
     });
 
-    // ask node server for an updated time every x seconds
+    // ask node server for initial time, then update every hour to stay synced
     var askfortimeupdate = function() {
         socket.emit("timeupdate");
     };
+    askfortimeupdate();
+    setInterval(askfortimeupdate, 3600000);
 
-    setInterval(askfortimeupdate, 5000);
-
-    // create a new moment
-    // var now = moment.utc();
-
-    // update date and time
-    // var timehours = $('.time .hours span');
-    // var timeminutes = $('.time .minutes span');
-    // var timeseconds = $('.time .seconds span');
-    // var timemonth = $('.date .month span');
-    // var timedate = $('.date .day span');
-    // var timeyear = $('.date .year span');
-    // var rendertime = function() {
-    //     now.add('s', 1);
-    //     timehours.text( now.format('HH') );
-    //     timeminutes.text( now.format('mm') );
-    //     timeseconds.text( now.format('ss') );
-    //     timemonth.text( now.format('MMM') );
-    //     timedate.text( now.format('DD') );
-    //     timeyear.text( now.format('YYYY') );
-    // };
-
-    // set initial time
-    // rendertime();
-
-    // update time every 1 second
-    // setInterval(rendertime, 1000);
-
-
-
-
-
-
-
-
-
-
-    //////////////////////////////////////////////////
-
-    // dynamically scale type to fit containers
-    // var scaletypeall = function() {
-    //     $('.scaletype').each( function(i) {
-    //         $(this).typescale();
-    //     });
-    // };
-    
-    // scaletypeall();
-
-    // $(window).resize(function() {
-    //     scaletypeall();
-    // });
+    // set date and time in the view
+    var rendertime = function() {
+        now.add('s', 1);
+        timehours.text( now.format('HH') );
+        timeminutes.text( now.format('mm') );
+        timeseconds.text( now.format('ss') );
+        timemonth.text( now.format('MMM') );
+        timedate.text( now.format('DD') );
+        timeyear.text( now.format('YYYY') );
+    };
+    setInterval(rendertime, 1000);
 
 });
