@@ -3,8 +3,15 @@ $(document).ready( function() {
     // set up socket.io connection
     var socket = io.connect("http://localhost:1111");
 
+    //////////////////////////////////////////////////////////////////
+    // NOTIFICATIONS
+
     // warning container
     var warningcontainer = $(".warning");
+    socket.on("notify", function (data) {
+        warningcontainer.text(data);
+        warningcontainer.css("visibility", "visible");
+    });
 
     //////////////////////////////////////////////////////////////////
     // TIME
@@ -22,11 +29,6 @@ $(document).ready( function() {
     socket.on("updatetime", function (data) {
         // update the moment
         now = moment.utc(data.dateString);
-        // display a warning if using server time as fallback
-        if (data.warning) {
-            warningcontainer.text(data.warning);
-            warningcontainer.css("visibility", "visible");
-        };
     });
 
     // ask node server for initial time, then update every hour to stay synced
