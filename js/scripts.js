@@ -7,11 +7,14 @@ $(document).ready( function() {
 
     // listen for updatetime event from the server
     socket.on("updatetime", function (data) {
-        alert(data.time);
+        // console.log(data.time);
     });
 
     // ask node server for an updated time every x seconds
-    var askfortimeupdate = socket.emit("timeupdate");
+    var askfortimeupdate = function() {
+        socket.emit("timeupdate");
+    };
+
     setInterval(askfortimeupdate, 5000);
 
     // create a new moment
