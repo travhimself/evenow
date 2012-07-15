@@ -1,7 +1,7 @@
 {
     'name': 'evenow',
     'author': 'travhimself',
-    'description': 'realtime eveonline dashboard',
+    'description': 'realtime eve online dashboard',
     'version': '0.0.1',
     'dependencies': {
         'connect': '1.8.x',
