@@ -50,4 +50,9 @@ $(document).ready( function() {
     };
     setInterval(rendertime, 1000);
 
+    //////////////////////////////////////////////////////////////////
+    // TRANQUILITY SERVER STATUS    
+
+    socket.emit("tranquilityupdate");
+
 });
