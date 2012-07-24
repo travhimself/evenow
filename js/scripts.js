@@ -18,22 +18,22 @@ $(document).ready( function() {
 
     // vars
     var now;
-    var timehours = $('.time .hours span');
-    var timeminutes = $('.time .minutes span');
-    var timeseconds = $('.time .seconds span');
-    var timemonth = $('.date .month span');
-    var timedate = $('.date .day span');
-    var timeyear = $('.date .year span');
+    var containertimehours = $('.time .hours span');
+    var containertimeminutes = $('.time .minutes span');
+    var containertimeseconds = $('.time .seconds span');
+    var containertimemonth = $('.date .month span');
+    var containertimedate = $('.date .day span');
+    var containertimeyear = $('.date .year span');
 
     // listen for updatetime event from the server
-    socket.on("updatetime", function (data) {
+    socket.on('updatetime', function (data) {
         // update the moment
         now = moment.utc(data.dateString);
     });
 
     // ask node server for initial time, then update every hour to stay synced
     var askfortimeupdate = function() {
-        socket.emit("timeupdate");
+        socket.emit('timeupdate');
     };
     askfortimeupdate();
     setInterval(askfortimeupdate, 3600000);
@@ -41,25 +41,47 @@ $(document).ready( function() {
     // set date and time in the view
     var rendertime = function() {
         now.add('s', 1);
-        timehours.text( now.format('HH') );
-        timeminutes.text( now.format('mm') );
-        timeseconds.text( now.format('ss') );
-        timemonth.text( now.format('MMM') );
-        timedate.text( now.format('DD') );
-        timeyear.text( now.format('YYYY') );
+        containertimehours.text( now.format('HH') );
+        containertimeminutes.text( now.format('mm') );
+        containertimeseconds.text( now.format('ss') );
+        containertimemonth.text( now.format('MMM') );
+        containertimedate.text( now.format('DD') );
+        containertimeyear.text( now.format('YYYY') );
     };
     setInterval(rendertime, 1000);
 
     //////////////////////////////////////////////////////////////////
     // TRANQUILITY SERVER STATUS    
 
-    // ask node server for initial status
-    // socket.emit("tranquilityupdate");
+    // vars
+    var tranquilitystatus;
+    var playersonline;
+    var containertranquilitystatus = $('.serverstatus .value');
+    var containerplayersonline = $('.playersonline .value');
 
     // listen for updatetranquility event from the server
-    // socket.on("updatetranquility", function (data) {
-        // update the server status
-    //     console.log(data);
-    // });
+    socket.on('updatetranquility', function (data) {
+        // update the server status and player count
+        if ( data.result.serverOpen == 'True' ) {
+            tranquilitystatus = 'Online';
+        } else {
+            tranquilitystatus = 'Offline';
+        }
+        playersonline = data.result.onlinePlayers;
+        rendertranquilitystatus();
+    });
+
+    // ask node server for initial server satus, then update every 10 minutes
+    var askforserverupdate = function() {
+        socket.emit('tranquilityupdate');
+    };
+    askforserverupdate();
+    setInterval(askforserverupdate, 600000);
+
+    // set server status and player count in the view
+    var rendertranquilitystatus = function() {
+        containertranquilitystatus.text(tranquilitystatus);
+        containerplayersonline.text(playersonline);
+    };
 
 });

@@ -71,11 +71,12 @@ io.sockets.on("connection", function (socket) {
             res.addListener('end', function() {
                 // parse the xml in the responsebody into JSON
                 xmlsimple.parse(responsebody, function(e, parsed) {
-                    console.log(parsed);
+                    // console.log(parsed);
+                    responseparsed = parsed;
                 });
+                // publish updatetranquility event to the client
+                socket.emit("updatetranquility", responseparsed);
             });
-            // publish updatetranquility event to the client
-            // socket.emit("updatetranquility", responseparsed);
         });
 
     });
