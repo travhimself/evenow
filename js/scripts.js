@@ -53,6 +53,13 @@ $(document).ready( function() {
     //////////////////////////////////////////////////////////////////
     // TRANQUILITY SERVER STATUS    
 
-    socket.emit("tranquilityupdate");
+    // ask node server for initial status
+    // socket.emit("tranquilityupdate");
+
+    // listen for updatetranquility event from the server
+    // socket.on("updatetranquility", function (data) {
+        // update the server status
+    //     console.log(data);
+    // });
 
 });
