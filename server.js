@@ -81,4 +81,34 @@ io.sockets.on("connection", function (socket) {
 
     });
 
+    // listen for kill counts status update from the client
+    socket.on("killcountsupdate", function (data) {
+
+        // set up options for the get request
+        options = {
+            host:'api.eveonline.com',
+            path:'/map/Kills.xml.aspx',
+            port:80
+        };
+
+        // hit the eve API with the options above
+        http.get( options, function (res) {
+            // build the responsebody string as the data comes in
+            res.setEncoding('utf8');
+            res.on('data', function (d) {
+                responsebody += d;
+            });
+            res.addListener('end', function() {
+                // parse the xml in the responsebody into JSON
+                xmlsimple.parse(responsebody, function(e, parsed) {
+                    console.log(parsed);
+                    responseparsed = parsed;
+                });
+                // publish updatekillcounts event to the client
+                socket.emit("updatekillcounts", responseparsed);
+            });
+        });
+
+    });
+
 });

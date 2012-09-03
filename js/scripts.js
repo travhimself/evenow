@@ -76,12 +76,41 @@ $(document).ready( function() {
         socket.emit('tranquilityupdate');
     };
     askforserverupdate();
-    setInterval(askforserverupdate, 600000);
+    setInterval(askforserverupdate, 300000);
 
     // set server status and player count in the view
     var rendertranquilitystatus = function() {
         containertranquilitystatus.text(tranquilitystatus);
         containerplayersonline.text(playersonline);
+    };
+
+    //////////////////////////////////////////////////////////////////
+    // KILL COUNTS    
+
+    // vars
+    var totalkills;
+    var mostkills;
+    var containertotalkills = $('.kills .value');
+    var containermostkills = $('.killssystem .value');
+
+    // listen for updatetranquility event from the server
+    socket.on('updatekillcounts', function (data) {
+        // update the server status and player count
+        // playersonline = data.result.onlinePlayers;
+        // renderkillcounts();
+    });
+
+    // ask node server for initial server satus, then update every 10 minutes
+    var askforkillcountsupdate = function() {
+        socket.emit('killcountsupdate');
+    };
+    askforkillcountsupdate();
+    setInterval(askforkillcountsupdate, 300000);
+
+    // set server status and player count in the view
+    var renderkillcounts = function() {
+        // containertranquilitystatus.text(tranquilitystatus);
+        // containerplayersonline.text(playersonline);
     };
 
 });
