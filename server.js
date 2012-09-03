@@ -5,7 +5,9 @@ var xmlsimple = require('xml-simple');
 //var xml2js = require("xml2js");
 
 // set up a node server on port 8000 with the express module
-var app = require('express').createServer();
+// var app = require('express').createServer();
+var express = require('express');
+var app = express();
 app.listen(8000);
 
 // create a socket.io server on port 1111
