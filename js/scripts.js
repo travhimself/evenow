@@ -91,6 +91,7 @@ $(document).ready( function() {
     var systemsarray;
     var totalkills = 0;
     var mostkillssystem;
+    var mostkillssystemid;
     var mostkillscount = 0;
     var containertotalkills = $('.kills .value');
     var containermostkillssystem = $('.mostkillssystem .value');
@@ -111,11 +112,23 @@ $(document).ready( function() {
             // system with most kills
             if (parseInt(systemsarray[i]['@'].shipKills) >= mostkillscount) {
                 mostkillscount = parseInt(systemsarray[i]['@'].shipKills);
-                mostkillssystem = systemsarray[i]['@'].solarSystemID;
+                mostkillssystemid = systemsarray[i]['@'].solarSystemID;
             }
         });
+        askforsystemname(mostkillssystemid);
         renderkillcount();
     });
+
+    // listen for system name lookup from the server
+    socket.on('lookupsystemname', function (data) {
+        mostkillssystem = data.result.rowset.row['@']['name'];
+        rendersystemname();
+    });
+
+    // ask node server to lookup system name by ID
+    var askforsystemname = function (systemid) {
+        socket.emit('systemnamelookup', systemid);
+    };
 
     // ask node server for initial kill count, then update every 10 minutes
     var askforkillcountupdate = function() {
@@ -124,11 +137,15 @@ $(document).ready( function() {
     askforkillcountupdate();
     setInterval(askforkillcountupdate, 300000);
 
-    // set kill count in the view
+    // set kill info in the view
     var renderkillcount = function() {
         containertotalkills.text(totalkills).digits();
-        containermostkillssystem.text(mostkillssystem);
         containermostkillssystemcount.text(mostkillscount);
+    };
+
+    // set the system kill info in the view
+    var rendersystemname = function() {
+        containermostkillssystem.text(mostkillssystem);
         containermostkillssystemlabel.text(mostkillssystem);
     };
 
