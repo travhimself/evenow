@@ -51,7 +51,7 @@ $(document).ready( function() {
     setInterval(rendertime, 1000);
 
     //////////////////////////////////////////////////////////////////
-    // TRANQUILITY SERVER STATUS    
+    // TRANQUILITY SERVER STATUS
 
     // vars
     var tranquilitystatus;
@@ -85,32 +85,76 @@ $(document).ready( function() {
     };
 
     //////////////////////////////////////////////////////////////////
-    // KILL COUNTS    
+    // KILL COUNTS
 
     // vars
-    var totalkills;
+    var systemsarray;
+    var totalkills = 0;
     var mostkills;
     var containertotalkills = $('.kills .value');
     var containermostkills = $('.killssystem .value');
 
-    // listen for updatetranquility event from the server
-    socket.on('updatekillcounts', function (data) {
-        // update the server status and player count
-        // playersonline = data.result.onlinePlayers;
-        // renderkillcounts();
+    // listen for updatekillcount event from the server
+    socket.on('updatekillcount', function (data) {
+        // reset totalkills var
+        totalkills = 0;
+        
+        // calculate and update the number of total kills
+        systemsarray = data.result.rowset.row;
+        $.each(systemsarray, function(i, v) {
+            totalkills += parseInt(systemsarray[i]['@'].shipKills);
+        });
+
+        renderkillcount();
     });
 
-    // ask node server for initial server satus, then update every 10 minutes
-    var askforkillcountsupdate = function() {
-        socket.emit('killcountsupdate');
+    // ask node server for initial kill count, then update every 10 minutes
+    var askforkillcountupdate = function() {
+        socket.emit('killcountupdate');
     };
-    askforkillcountsupdate();
-    setInterval(askforkillcountsupdate, 300000);
+    askforkillcountupdate();
+    setInterval(askforkillcountupdate, 300000);
 
-    // set server status and player count in the view
-    var renderkillcounts = function() {
-        // containertranquilitystatus.text(tranquilitystatus);
-        // containerplayersonline.text(playersonline);
+    // set kill count in the view
+    var renderkillcount = function() {
+        containertotalkills.text(totalkills);
+    };
+
+    //////////////////////////////////////////////////////////////////
+    // MARKET DATA
+
+    // vars
+    var pricetritanium;
+    var pricemegacyte;
+    var pricetechnetium;
+    var priceliquidozone;
+    var pricedrake;
+    var containertritanium = $('.price.tritanium .value');
+    var containermegacyte = $('.price.megacyte .value');
+    var containertechnetium = $('.price.technetium .value');
+    var containerliquidozone = $('.price.liquidozone .value');
+    var containerdrake = $('.price.drake .value');
+
+    // listen for updatemarketdata event from the server
+    socket.on('updatemarketdata', function (data) {
+        // update the market data
+        // rendermarketdata();
+    });
+
+    // ask node server for initial market data, then update every 10 minutes
+    var askformarketdataupdate = function() {
+        socket.emit('marketdataupdate');
+    };
+    askformarketdataupdate();
+    setInterval(askformarketdataupdate, 300000);
+
+    // set market data in the view
+    var rendermarketdata = function() {
+        containertritanium.text(pricetritanium);
+        containermegacyte.text(pricemegacyte);
+        containertechnetium.text(pricetechnetium);
+        containerliquidozone.text(priceliquidozone);
+        containerdrake.text(pricedrake);
     };
 
 });

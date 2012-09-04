@@ -84,7 +84,7 @@ io.sockets.on("connection", function (socket) {
     });
 
     // listen for kill counts status update from the client
-    socket.on("killcountsupdate", function (data) {
+    socket.on("killcountupdate", function (data) {
 
         // set up options for the get request
         options = {
@@ -106,8 +106,8 @@ io.sockets.on("connection", function (socket) {
                     console.log(parsed);
                     responseparsed = parsed;
                 });
-                // publish updatekillcounts event to the client
-                socket.emit("updatekillcounts", responseparsed);
+                // publish updatekillcount event to the client
+                socket.emit("updatekillcount", responseparsed);
             });
         });
 
