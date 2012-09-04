@@ -81,7 +81,7 @@ $(document).ready( function() {
     // set server status and player count in the view
     var rendertranquilitystatus = function() {
         containertranquilitystatus.text(tranquilitystatus);
-        containerplayersonline.text(playersonline);
+        containerplayersonline.text(playersonline).digits();
     };
 
     //////////////////////////////////////////////////////////////////
@@ -98,7 +98,7 @@ $(document).ready( function() {
     socket.on('updatekillcount', function (data) {
         // reset totalkills var
         totalkills = 0;
-        
+
         // calculate and update the number of total kills
         systemsarray = data.result.rowset.row;
         $.each(systemsarray, function(i, v) {
@@ -117,7 +117,7 @@ $(document).ready( function() {
 
     // set kill count in the view
     var renderkillcount = function() {
-        containertotalkills.text(totalkills);
+        containertotalkills.text(totalkills).digits();
     };
 
     //////////////////////////////////////////////////////////////////
@@ -138,7 +138,12 @@ $(document).ready( function() {
     // listen for updatemarketdata event from the server
     socket.on('updatemarketdata', function (data) {
         // update the market data
-        // rendermarketdata();
+        pricetritanium = data.marketstat.type[0].sell.avg;
+        pricemegacyte = data.marketstat.type[1].sell.avg;
+        pricetechnetium = data.marketstat.type[2].sell.avg;
+        priceliquidozone = data.marketstat.type[3].sell.avg;
+        pricedrake = data.marketstat.type[4].sell.avg;
+        rendermarketdata();
     });
 
     // ask node server for initial market data, then update every 10 minutes
@@ -150,11 +155,11 @@ $(document).ready( function() {
 
     // set market data in the view
     var rendermarketdata = function() {
-        containertritanium.text(pricetritanium);
-        containermegacyte.text(pricemegacyte);
-        containertechnetium.text(pricetechnetium);
-        containerliquidozone.text(priceliquidozone);
-        containerdrake.text(pricedrake);
+        containertritanium.text(pricetritanium).digits();
+        containermegacyte.text(pricemegacyte).digits();
+        containertechnetium.text(pricetechnetium).digits();
+        containerliquidozone.text(priceliquidozone).digits();
+        containerdrake.text(pricedrake).digits();
     };
 
 });

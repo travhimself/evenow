@@ -113,4 +113,34 @@ io.sockets.on("connection", function (socket) {
 
     });
 
+    // listen for market data update from the client
+    socket.on("marketdataupdate", function (data) {
+
+        // set up options for the get request
+        options = {
+            host:'api.eve-central.com',
+            path:'/api/marketstat?typeid=34&typeid=40&typeid=16649&typeid=16273&typeid=24698',
+            port:80
+        };
+
+        // hit the eve-central API with the options above
+        http.get( options, function (res) {
+            // build the responsebody string as the data comes in
+            res.setEncoding('utf8');
+            res.on('data', function (d) {
+                responsebody += d;
+            });
+            res.addListener('end', function() {
+                // parse the xml in the responsebody into JSON
+                xmlsimple.parse(responsebody, function(e, parsed) {
+                    console.log(parsed);
+                    responseparsed = parsed;
+                });
+                // publish updatekillcount event to the client
+                socket.emit("updatemarketdata", responseparsed);
+            });
+        });
+
+    });
+
 });
