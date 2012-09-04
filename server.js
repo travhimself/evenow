@@ -119,7 +119,7 @@ io.sockets.on("connection", function (socket) {
         // set up options for the get request
         options = {
             host:'api.eve-central.com',
-            path:'/api/marketstat?typeid=34&typeid=40&typeid=16649&typeid=16273&typeid=24698',
+            path:'/api/marketstat?typeid=34&typeid=37&typeid=40&typeid=16649&typeid=16273&typeid=24698',
             port:80
         };
 

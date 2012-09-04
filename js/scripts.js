@@ -90,21 +90,30 @@ $(document).ready( function() {
     // vars
     var systemsarray;
     var totalkills = 0;
-    var mostkills;
+    var mostkillssystem;
+    var mostkillscount = 0;
     var containertotalkills = $('.kills .value');
-    var containermostkills = $('.killssystem .value');
+    var containermostkillssystem = $('.mostkillssystem .value');
+    var containermostkillssystemcount = $('.mostkillssystemcount .value');
+    var containermostkillssystemlabel = $('.mostkillssystemcount .label span');
 
     // listen for updatekillcount event from the server
     socket.on('updatekillcount', function (data) {
         // reset totalkills var
         totalkills = 0;
 
-        // calculate and update the number of total kills
+        // count kills
         systemsarray = data.result.rowset.row;
         $.each(systemsarray, function(i, v) {
+            // total kills
             totalkills += parseInt(systemsarray[i]['@'].shipKills);
-        });
 
+            // system with most kills
+            if (parseInt(systemsarray[i]['@'].shipKills) >= mostkillscount) {
+                mostkillscount = parseInt(systemsarray[i]['@'].shipKills);
+                mostkillssystem = systemsarray[i]['@'].solarSystemID;
+            }
+        });
         renderkillcount();
     });
 
@@ -118,6 +127,9 @@ $(document).ready( function() {
     // set kill count in the view
     var renderkillcount = function() {
         containertotalkills.text(totalkills).digits();
+        containermostkillssystem.text(mostkillssystem);
+        containermostkillssystemcount.text(mostkillscount);
+        containermostkillssystemlabel.text(mostkillssystem);
     };
 
     //////////////////////////////////////////////////////////////////
@@ -125,11 +137,13 @@ $(document).ready( function() {
 
     // vars
     var pricetritanium;
+    var priceisogen;
     var pricemegacyte;
     var pricetechnetium;
     var priceliquidozone;
     var pricedrake;
     var containertritanium = $('.price.tritanium .value');
+    var containerisogen = $('.price.isogen .value');
     var containermegacyte = $('.price.megacyte .value');
     var containertechnetium = $('.price.technetium .value');
     var containerliquidozone = $('.price.liquidozone .value');
@@ -139,10 +153,11 @@ $(document).ready( function() {
     socket.on('updatemarketdata', function (data) {
         // update the market data
         pricetritanium = data.marketstat.type[0].sell.avg;
-        pricemegacyte = data.marketstat.type[1].sell.avg;
-        pricetechnetium = data.marketstat.type[2].sell.avg;
-        priceliquidozone = data.marketstat.type[3].sell.avg;
-        pricedrake = data.marketstat.type[4].sell.avg;
+        priceisogen = data.marketstat.type[1].sell.avg;
+        pricemegacyte = data.marketstat.type[2].sell.avg;
+        pricetechnetium = data.marketstat.type[3].sell.avg;
+        priceliquidozone = data.marketstat.type[4].sell.avg;
+        pricedrake = data.marketstat.type[5].sell.avg;
         rendermarketdata();
     });
 
@@ -156,6 +171,7 @@ $(document).ready( function() {
     // set market data in the view
     var rendermarketdata = function() {
         containertritanium.text(pricetritanium).digits();
+        containerisogen.text(priceisogen).digits();
         containermegacyte.text(pricemegacyte).digits();
         containertechnetium.text(pricetechnetium).digits();
         containerliquidozone.text(priceliquidozone).digits();
