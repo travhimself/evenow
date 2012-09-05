@@ -5,7 +5,9 @@
     "version": "0.0.1",
     "dependencies": {
         "connect": "2.x",
-        "express": "3.x"
+        "express": "3.x",
+        "socket.io": "0.9",
+        "xml-simple": "*"
     },
     "engine": "0.8.1",
     "main": "server.js"
