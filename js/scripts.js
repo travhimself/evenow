@@ -107,7 +107,11 @@ $(document).ready( function() {
         systemsarray = data.result.rowset.row;
         $.each(systemsarray, function(i, v) {
             // total kills
-            totalkills += parseInt(systemsarray[i]['@'].shipKills);
+            if (!isNaN(parseInt(systemsarray[i]['@'].shipKills))) {
+                // only add up results that are not NaN (which sometimes happens)...
+                // ...need a better solution for this situation
+                totalkills += parseInt(systemsarray[i]['@'].shipKills);
+            }
 
             // system with most kills
             if (parseInt(systemsarray[i]['@'].shipKills) >= mostkillscount) {

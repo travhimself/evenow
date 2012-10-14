@@ -6,7 +6,6 @@ body {
     font-family: 'din', 'helvetica neue', 'helvetica', 'arial', sans-serif;
     text-transform: uppercase;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, .1);
-    line-height: 1;
     color: rgba(255, 255, 255, 1.0);
     background: rgba(0, 0, 0, 1.0) url(../img/bg2.png) 50% 0 no-repeat;
 
@@ -31,24 +30,25 @@ body {
 
         .alpha, .omega {
             text-align: right;
-            padding: 20px;
-            background: rgba(0, 0, 0, .4);
-            // border-right: 5px solid rgba(255, 255, 255, 1.0);
         }
 
         .block {
+            padding: 20px;
             margin-bottom: 20px;
+            background: rgba(0, 0, 0, .4);
 
             &:last-of-type {
                 margin-bottom: 0;
             }
 
             .label {
-                font-size: 36px;
+                font-weight: 500;
+                font-size: 20px;
             }
 
             .value {
-                font-size: 96px;
+                font-size: 72px;
+                line-height: 1.1;
             }
 
             &.datetime {
@@ -60,20 +60,30 @@ body {
 
                 .date {
                     .rotate(-90deg);
+                    font-size: 17px;
+                    font-weight: 500;
                     position: absolute;
-                    bottom: 40px;
-                    right: -27px;
-                    font-size: 18px;
+                    top: 71px;
+                    right: -2px;
+
+                    .year {
+                        display: none;
+                    }
                 }
             }
 
             &.support {
                 text-align: right;
+                font-weight: 500;
 
                 a {
                     color: #fff;
                     text-decoration: none;
                     padding-right: 10px;
+
+                    &:last-of-type {
+                        padding-right: 0;
+                    }
                 }
             }
         }
