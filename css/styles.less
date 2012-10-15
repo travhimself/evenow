@@ -21,7 +21,7 @@ body {
 
     .container {
         
-        margin: 2em auto;
+        margin: 0 auto;
         padding-top: 2em;
 
         .scaletype {
@@ -32,57 +32,57 @@ body {
             text-align: right;
         }
 
-        .block {
-            padding: 20px;
-            margin-bottom: 20px;
-            background: rgba(0, 0, 0, .4);
+        .row {
+            margin-bottom: 0;
 
-            &:last-of-type {
-                margin-bottom: 0;
-            }
+            .block {
+                padding: 20px;
+                margin-bottom: 20px;
+                background: rgba(0, 0, 0, .4);
 
-            .label {
-                font-weight: 500;
-                font-size: 20px;
-            }
-
-            .value {
-                font-size: 72px;
-                line-height: 1.1;
-            }
-
-            &.datetime {
-                position: relative;
-
-                .time {
-                    margin-right: 20px;
+                .label {
+                    font-weight: 500;
+                    font-size: 20px;
                 }
 
-                .date {
-                    .rotate(-90deg);
-                    font-size: 17px;
-                    font-weight: 500;
-                    position: absolute;
-                    top: 71px;
-                    right: -2px;
+                .value {
+                    font-size: 72px;
+                    line-height: 1.1;
+                }
 
-                    .year {
-                        display: none;
+                &.datetime {
+                    position: relative;
+
+                    .time {
+                        margin-right: 20px;
+                    }
+
+                    .date {
+                        .rotate(-90deg);
+                        font-size: 17px;
+                        font-weight: 500;
+                        position: absolute;
+                        top: 71px;
+                        right: -2px;
+
+                        .year {
+                            display: none;
+                        }
                     }
                 }
-            }
 
-            &.support {
-                text-align: right;
-                font-weight: 500;
+                &.support {
+                    text-align: right;
+                    font-weight: 500;
 
-                a {
-                    color: #fff;
-                    text-decoration: none;
-                    padding-right: 10px;
+                    a {
+                        color: #fff;
+                        text-decoration: none;
+                        padding-right: 10px;
 
-                    &:last-of-type {
-                        padding-right: 0;
+                        &:last-of-type {
+                            padding-right: 0;
+                        }
                     }
                 }
             }
