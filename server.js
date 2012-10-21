@@ -64,7 +64,7 @@ io.sockets.on("connection", function (socket) {
         };
 
         // hit the eve API with the options above
-        http.get( options, function (res) {
+        https.get( options, function (res) {
             // build the responsebody string as the data comes in
             res.setEncoding('utf8');
             res.on('data', function (d) {
@@ -79,6 +79,8 @@ io.sockets.on("connection", function (socket) {
                 // publish updatetranquility event to the client
                 socket.emit("updatetranquility", responseparsed);
             });
+        }).on('error', function(err) {
+            console.error(err);
         });
 
     });
@@ -94,7 +96,7 @@ io.sockets.on("connection", function (socket) {
         };
 
         // hit the eve API with the options above
-        http.get( options, function (res) {
+        https.get( options, function (res) {
             // build the responsebody string as the data comes in
             res.setEncoding('utf8');
             res.on('data', function (d) {
@@ -109,6 +111,8 @@ io.sockets.on("connection", function (socket) {
                 // publish updatekillcount event to the client
                 socket.emit("updatekillcount", responseparsed);
             });
+        }).on('error', function(err) {
+            console.error(err);
         });
 
     });
@@ -124,7 +128,7 @@ io.sockets.on("connection", function (socket) {
         };
 
         // hit the eve API with the options above
-        http.get( options, function (res) {
+        https.get( options, function (res) {
             // build the responsebody string as the data comes in
             res.setEncoding('utf8');
             res.on('data', function (d) {
@@ -139,6 +143,8 @@ io.sockets.on("connection", function (socket) {
                 // publish lookupsystemname event to the client
                 socket.emit("lookupsystemname", responseparsed);
             });
+        }).on('error', function(err) {
+            console.error(err);
         });
 
     });
