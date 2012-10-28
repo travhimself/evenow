@@ -16,8 +16,6 @@ var io = require("socket.io").listen(1111);
 // initialize some vars for later
 var newtime;
 var options;
-var responsebody;
-var responseparsed;
 
 // language vars
 var notifytimefallback = "Warning: EVE TIME may not be accurate.";
@@ -56,11 +54,14 @@ io.sockets.on("connection", function (socket) {
     // listen for tranquility status update from the client
     socket.on("tranquilityupdate", function (data) {
 
+        // local vars
+        var tqresponsebody;
+        var tqresponseparsed;
+
         // set up options for the get request
         options = {
             host:'api.eveonline.com',
-            path:'/server/ServerStatus.xml.aspx',
-            port:80
+            path:'/server/ServerStatus.xml.aspx'
         };
 
         // hit the eve API with the options above
@@ -68,16 +69,16 @@ io.sockets.on("connection", function (socket) {
             // build the responsebody string as the data comes in
             res.setEncoding('utf8');
             res.on('data', function (d) {
-                responsebody += d;
+                tqresponsebody += d;
             });
             res.addListener('end', function() {
                 // parse the xml in the responsebody into JSON
-                xmlsimple.parse(responsebody, function(e, parsed) {
+                xmlsimple.parse(tqresponsebody, function(e, parsed) {
                     // console.log(parsed);
-                    responseparsed = parsed;
+                    tqresponseparsed = parsed;
                 });
                 // publish updatetranquility event to the client
-                socket.emit("updatetranquility", responseparsed);
+                socket.emit("updatetranquility", tqresponseparsed);
             });
         }).on('error', function(err) {
             console.error(err);
@@ -88,11 +89,14 @@ io.sockets.on("connection", function (socket) {
     // listen for kill counts status update from the client
     socket.on("killcountupdate", function (data) {
 
+        // local vars
+        var kcresponsebody;
+        var kcresponseparsed;
+
         // set up options for the get request
         options = {
             host:'api.eveonline.com',
-            path:'/map/Kills.xml.aspx',
-            port:80
+            path:'/map/Kills.xml.aspx'
         };
 
         // hit the eve API with the options above
@@ -100,16 +104,16 @@ io.sockets.on("connection", function (socket) {
             // build the responsebody string as the data comes in
             res.setEncoding('utf8');
             res.on('data', function (d) {
-                responsebody += d;
+                kcresponsebody += d;
             });
             res.addListener('end', function() {
                 // parse the xml in the responsebody into JSON
-                xmlsimple.parse(responsebody, function(e, parsed) {
+                xmlsimple.parse(kcresponsebody, function(e, parsed) {
                     console.log(parsed);
-                    responseparsed = parsed;
+                    kcresponseparsed = parsed;
                 });
                 // publish updatekillcount event to the client
-                socket.emit("updatekillcount", responseparsed);
+                socket.emit("updatekillcount", kcresponseparsed);
             });
         }).on('error', function(err) {
             console.error(err);
@@ -120,11 +124,14 @@ io.sockets.on("connection", function (socket) {
     // listen for system name lookup request from the client
     socket.on("systemnamelookup", function (data) {
 
+        // local vars
+        var syresponsebody;
+        var syresponseparsed;
+
         // set up options for the get request
         options = {
             host:'api.eveonline.com',
-            path:'/eve/CharacterName.xml.aspx?IDs=' + data,
-            port:80
+            path:'/eve/CharacterName.xml.aspx?IDs=' + data
         };
 
         // hit the eve API with the options above
@@ -132,16 +139,16 @@ io.sockets.on("connection", function (socket) {
             // build the responsebody string as the data comes in
             res.setEncoding('utf8');
             res.on('data', function (d) {
-                responsebody += d;
+                syresponsebody += d;
             });
             res.addListener('end', function() {
                 // parse the xml in the responsebody into JSON
-                xmlsimple.parse(responsebody, function(e, parsed) {
+                xmlsimple.parse(syresponsebody, function(e, parsed) {
                     console.log(parsed);
-                    responseparsed = parsed;
+                    syresponseparsed = parsed;
                 });
                 // publish lookupsystemname event to the client
-                socket.emit("lookupsystemname", responseparsed);
+                socket.emit("lookupsystemname", syresponseparsed);
             });
         }).on('error', function(err) {
             console.error(err);
@@ -151,6 +158,10 @@ io.sockets.on("connection", function (socket) {
 
     // listen for market data update from the client
     socket.on("marketdataupdate", function (data) {
+
+        // local vars
+        var mkresponsebody;
+        var mkresponseparsed;
 
         // set up options for the get request
         options = {
@@ -164,16 +175,16 @@ io.sockets.on("connection", function (socket) {
             // build the responsebody string as the data comes in
             res.setEncoding('utf8');
             res.on('data', function (d) {
-                responsebody += d;
+                mkresponsebody += d;
             });
             res.addListener('end', function() {
                 // parse the xml in the responsebody into JSON
-                xmlsimple.parse(responsebody, function(e, parsed) {
+                xmlsimple.parse(mkresponsebody, function(e, parsed) {
                     console.log(parsed);
-                    responseparsed = parsed;
+                    mkresponseparsed = parsed;
                 });
                 // publish updatekillcount event to the client
-                socket.emit("updatemarketdata", responseparsed);
+                socket.emit("updatemarketdata", mkresponseparsed);
             });
         });
 
