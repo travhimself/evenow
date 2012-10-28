@@ -18,7 +18,7 @@ var newtime;
 var options;
 
 // language vars
-var notifytimefallback = "Warning: EVE TIME may not be accurate.";
+var notifytimefallback = "Warning: EVE TIME may not be accurate. Refresh to pull time again.";
 
 // listen for websocket connections from the client
 io.sockets.on("connection", function (socket) {
@@ -26,8 +26,14 @@ io.sockets.on("connection", function (socket) {
     // listen for timeupdate event from the client
     socket.on("timeupdate", function (data) {
 
+        // set up options for the get request
+        options = {
+            host:'www.timeapi.org',
+            path:'/utc/now.json'
+        };
+
         // retrieve time from timeapi.org
-        http.get("http://www.timeapi.org/utc/now.json", function (res) {
+        http.get( options, function (res) {
             // set the response to a utf8 string instead of a buffer
             res.setEncoding("utf8");
             res.on("data", function (chunk) {
