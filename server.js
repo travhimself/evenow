@@ -2,7 +2,6 @@
 var http = require("http");
 var https = require("https");
 var xmlsimple = require('xml-simple');
-//var xml2js = require("xml2js");
 
 // set up a node server on port 8000 with the express module
 // var app = require('express').createServer();
