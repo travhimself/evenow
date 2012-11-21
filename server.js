@@ -17,7 +17,7 @@ var newtime;
 var options;
 
 // data point vars
-var data_serverstatus;
+var data_tranquilitystatus;
 var data_playersonline;
 var data_totalkills;
 var data_mostkillssystem;
@@ -28,36 +28,6 @@ var data_pricemegacyte;
 var data_pricetechnetium;
 var data_priceliquidozone;
 var data_pricedrake;
-
-// language vars
-var notifytimefallback = "Warning: EVE TIME may not be accurate. Refresh to pull time again.";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Get data points from various APIs
 var tranquilityupdate = function(data) {
@@ -84,8 +54,13 @@ var tranquilityupdate = function(data) {
                 // console.log(parsed);
                 tqresponseparsed = parsed;
             });
-            // publish updatetranquility event to the client
-            // socket.emit("updatetranquility", tqresponseparsed);
+            // update the server status and player count vars
+            if ( tqresponseparsed.result.serverOpen == 'True' ) {
+                data_tranquilitystatus = 'Online';
+            } else {
+                data_tranquilitystatus = 'Offline';
+            }
+            data_playersonline = tqresponseparsed.result.onlinePlayers;
         });
     }).on('error', function(err) {
         console.error(err);
@@ -93,12 +68,6 @@ var tranquilityupdate = function(data) {
 };
 tranquilityupdate();
 setInterval(tranquilityupdate, 300000);
-
-
-
-
-
-
 
 var killcountupdate = function(data) {
     // local vars
@@ -131,6 +100,8 @@ var killcountupdate = function(data) {
         console.error(err);
     });
 };
+killcountupdate();
+setInterval(killcountupdate, 300000);
 
 var systemnamelookup = function(data) {
     // local vars
@@ -194,6 +165,8 @@ var marketdataupdate = function(data) {
         });
     });
 };
+marketdataupdate();
+setInterval(marketdataupdate, 300000);
 
 // listen for websocket connections from the client
 io.sockets.on("connection", function (socket) {
