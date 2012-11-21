@@ -16,18 +16,21 @@ var io = require("socket.io").listen(1111);
 var newtime;
 var options;
 
-// data point vars
-var data_tranquilitystatus;
-var data_playersonline;
-var data_totalkills;
-var data_mostkillssystem;
-var data_mostkillssystemcount;
-var data_pricetritanium;
-var data_priceisogen;
-var data_pricemegacyte;
-var data_pricetechnetium;
-var data_priceliquidozone;
-var data_pricedrake;
+// data points
+var datapoints = {
+    tranquilitystatus: 't',
+    playersonline: 't',
+    totalkills: 't',
+    mostkillssystem: 't',
+    mostkillssystemcount: 't',
+    mostkillssystemlabel: 't',
+    pricetritanium: 't',
+    priceisogen: 't',
+    pricemegacyte: 't',
+    pricetechnetium: 't',
+    priceliquidozone: 't',
+    pricedrake: 't'
+};
 
 // Get data points from various APIs
 var tranquilityupdate = function(data) {
@@ -54,13 +57,13 @@ var tranquilityupdate = function(data) {
                 // console.log(parsed);
                 tqresponseparsed = parsed;
             });
-            // update the server status and player count vars
+            // update the server status and player count values
             if ( tqresponseparsed.result.serverOpen == 'True' ) {
-                data_tranquilitystatus = 'Online';
+                datapoints.tranquilitystatus = 'Online';
             } else {
-                data_tranquilitystatus = 'Offline';
+                datapoints.tranquilitystatus = 'Offline';
             }
-            data_playersonline = tqresponseparsed.result.onlinePlayers;
+            datapoints.playersonline = tqresponseparsed.result.onlinePlayers;
         });
     }).on('error', function(err) {
         console.error(err);
@@ -171,29 +174,9 @@ setInterval(marketdataupdate, 300000);
 // listen for websocket connections from the client
 io.sockets.on("connection", function (socket) {
 
-    // listen for timeupdate event from the client
-    socket.on("timeupdate", function (data) {
-        // hitapitime(data);
-    });
-
-    // listen for tranquility status update from the client
-    socket.on("tranquilityupdate", function (data) {
-        // hitapiserverstatus(data);
-    });
-
-    // listen for kill counts status update from the client
-    socket.on("killcountupdate", function (data) {
-        // hitapikillcount(data);
-    });
-
-    // listen for system name lookup request from the client
-    socket.on("systemnamelookup", function (data) {
-        // hitapisystemname(data);
-    });
-
-    // listen for market data update from the client
-    socket.on("marketdataupdate", function (data) {
-        // hitapievecentral(data);
+    // listen for getupdates event from the client
+    socket.on("getupdates", function (data) {
+        socket.emit("updateall", datapoints);
     });
 
 });

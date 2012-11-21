@@ -48,16 +48,50 @@ $(document).ready( function() {
         containertimedate.text( now.format('DD') );
         containertimeyear.text( now.format('YYYY') );
     };
-    setInterval(rendertime, 1000);
+    // setInterval(rendertime, 1000);
+
+    //////////////////////////////////////////////////////////////////
+    // DISPLAY/UPDATE THE DATA
+
+    // container vars
+    var containertranquilitystatus = $('.serverstatus .value');
+    var containerplayersonline = $('.playersonline .value');
+    var containertotalkills = $('.kills .value');
+    var containermostkillssystem = $('.mostkillssystem .value');
+    var containermostkillssystemcount = $('.mostkillssystemcount .value');
+    var containermostkillssystemlabel = $('.mostkillssystemcount .label span');
+    var containertritanium = $('.price.tritanium .value');
+    var containerisogen = $('.price.isogen .value');
+    var containermegacyte = $('.price.megacyte .value');
+    var containertechnetium = $('.price.technetium .value');
+    var containerliquidozone = $('.price.liquidozone .value');
+    var containerdrake = $('.price.drake .value');
+
+    socket.on('updateall', function (data) {
+        // update the view and whatnot
+        containertranquilitystatus.text(data.tranquilitystatus);
+        containerplayersonline.text(data.playersonline);
+        containertotalkills.text(data.totalkills);
+        containermostkillssystem.text(data.mostkillssystem);
+        containermostkillssystemcount.text(data.mostkillssystemcount);
+        containermostkillssystemlabel.text(data.mostkillssystemlabel);
+        containertritanium.text(data.pricetritanium);
+        containerisogen.text(data.priceisogen);
+        containermegacyte.text(data.pricemegacyte);
+        containertechnetium.text(data.pricetechnetium);
+        containerliquidozone.text(data.priceliquidozone);
+        containerdrake.text(data.pricedrake);
+    });
+
+    // ask node server for current data, then update every 5 minutes
+    var getnewdata = function() {
+        socket.emit('getupdates');
+    };
+    getnewdata();
+    setInterval(getnewdata, 300000);
 
     //////////////////////////////////////////////////////////////////
     // TRANQUILITY SERVER STATUS
-
-    // vars
-    var tranquilitystatus;
-    var playersonline;
-    var containertranquilitystatus = $('.serverstatus .value');
-    var containerplayersonline = $('.playersonline .value');
 
     // listen for updatetranquility event from the server
     socket.on('updatetranquility', function (data) {
@@ -86,17 +120,6 @@ $(document).ready( function() {
 
     //////////////////////////////////////////////////////////////////
     // KILL COUNTS
-
-    // vars
-    var systemsarray;
-    var totalkills = 0;
-    var mostkillssystem;
-    var mostkillssystemid;
-    var mostkillscount = 0;
-    var containertotalkills = $('.kills .value');
-    var containermostkillssystem = $('.mostkillssystem .value');
-    var containermostkillssystemcount = $('.mostkillssystemcount .value');
-    var containermostkillssystemlabel = $('.mostkillssystemcount .label span');
 
     // listen for updatekillcount event from the server
     socket.on('updatekillcount', function (data) {
@@ -155,20 +178,6 @@ $(document).ready( function() {
 
     //////////////////////////////////////////////////////////////////
     // MARKET DATA
-
-    // vars
-    var pricetritanium;
-    var priceisogen;
-    var pricemegacyte;
-    var pricetechnetium;
-    var priceliquidozone;
-    var pricedrake;
-    var containertritanium = $('.price.tritanium .value');
-    var containerisogen = $('.price.isogen .value');
-    var containermegacyte = $('.price.megacyte .value');
-    var containertechnetium = $('.price.technetium .value');
-    var containerliquidozone = $('.price.liquidozone .value');
-    var containerdrake = $('.price.drake .value');
 
     // listen for updatemarketdata event from the server
     socket.on('updatemarketdata', function (data) {
