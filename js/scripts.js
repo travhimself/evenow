@@ -3,54 +3,14 @@ $(document).ready( function() {
     // set up socket.io connection
     var socket = io.connect("http://localhost:1111");
 
-    // nofications
-
-    // warning container
+    // container vars
     var warningcontainer = $(".warning");
-    socket.on("notify", function (data) {
-        warningcontainer.text(data);
-        warningcontainer.css("visibility", "visible");
-    });
-
-    // time
-
-    // vars
-    var now;
     var containertimehours = $('.time .hours span');
     var containertimeminutes = $('.time .minutes span');
     var containertimeseconds = $('.time .seconds span');
     var containertimemonth = $('.date .month span');
     var containertimedate = $('.date .day span');
     var containertimeyear = $('.date .year span');
-
-    // listen for updatetime event from the server
-    socket.on('updatetime', function (data) {
-        // update the moment
-        now = moment.utc(data.dateString);
-    });
-
-    // ask node server for initial time, then update every hour to stay synced
-    var askfortimeupdate = function() {
-        socket.emit('timeupdate');
-    };
-    askfortimeupdate();
-    setInterval(askfortimeupdate, 3600000);
-
-    // set date and time in the view
-    var rendertime = function() {
-        now.add('s', 1);
-        containertimehours.text( now.format('HH') );
-        containertimeminutes.text( now.format('mm') );
-        containertimeseconds.text( now.format('ss') );
-        containertimemonth.text( now.format('MMM') );
-        containertimedate.text( now.format('DD') );
-        containertimeyear.text( now.format('YYYY') );
-    };
-    // setInterval(rendertime, 1000);
-
-    // display/update the data
-
-    // container vars
     var containertranquilitystatus = $('.serverstatus .value');
     var containerplayersonline = $('.playersonline .value');
     var containertotalkills = $('.kills .value');
@@ -64,6 +24,41 @@ $(document).ready( function() {
     var containerliquidozone = $('.price.liquidozone .value');
     var containerdrake = $('.price.drake .value');
 
+    // nofications
+    socket.on("notify", function (data) {
+        warningcontainer.text(data);
+        warningcontainer.css("visibility", "visible");
+    });
+
+    // time
+    // use system time for starters, in case time api fails...
+    var now = moment.utc();
+
+    $.ajax({
+        url: 'http://timeapi.org/utc/now.json?callback=gettime',
+        dataType: "jsonp",
+        success: function(data) {
+            // ...adjust time based on api response
+            now = moment.utc(data.dateString)
+        },
+        error: function(data) {
+            // error handling
+        }
+    });
+
+    // set date and time in the view
+    var rendertime = function() {
+        now.add('s', 1);
+        containertimehours.text( now.format('HH') );
+        containertimeminutes.text( now.format('mm') );
+        containertimeseconds.text( now.format('ss') );
+        containertimemonth.text( now.format('MMM') );
+        containertimedate.text( now.format('DD') );
+        containertimeyear.text( now.format('YYYY') );
+    };
+    setInterval(rendertime, 1000);
+
+    // display/update the data
     socket.on('updateall', function (data) {
         // update the view and whatnot
         containertranquilitystatus.text(data.tranquilitystatus);
