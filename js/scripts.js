@@ -60,7 +60,6 @@ $(document).ready( function() {
 
     // display/update the data
     socket.on('updateall', function (data) {
-        // update the view and whatnot
         containertranquilitystatus.text(data.tranquilitystatus);
         containerplayersonline.text(data.playersonline).digits();
         containertotalkills.text(data.totalkills).digits();
