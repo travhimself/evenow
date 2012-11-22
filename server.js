@@ -12,24 +12,19 @@ app.listen(8000);
 // create a socket.io server on port 1111
 var io = require("socket.io").listen(1111);
 
-// initialize some vars for later
-var newtime;
-var options;
-
 // data points
 var datapoints = {
-    tranquilitystatus: 't',
-    playersonline: 't',
-    totalkills: 't',
-    mostkillssystem: 't',
-    mostkillssystemcount: 't',
-    mostkillssystemlabel: 't',
-    pricetritanium: 't',
-    priceisogen: 't',
-    pricemegacyte: 't',
-    pricetechnetium: 't',
-    priceliquidozone: 't',
-    pricedrake: 't'
+    tranquilitystatus: '',
+    playersonline: 0,
+    totalkills: 0,
+    mostkillssystem: '',
+    mostkillssystemcount: 0,
+    pricetritanium: 0,
+    priceisogen: 0,
+    pricemegacyte: 0,
+    pricetechnetium: 0,
+    priceliquidozone: 0,
+    pricedrake: 0
 };
 
 // Get data points from various APIs
@@ -39,7 +34,7 @@ var tranquilityupdate = function(data) {
     var tqresponseparsed;
 
     // set up options for the get request
-    options = {
+    var options = {
         host:'api.eveonline.com',
         path:'/server/ServerStatus.xml.aspx'
     };
@@ -69,16 +64,21 @@ var tranquilityupdate = function(data) {
         console.error(err);
     });
 };
+// fetch initial results
 tranquilityupdate();
+// update every 5 minutes
 setInterval(tranquilityupdate, 300000);
 
 var killcountupdate = function(data) {
     // local vars
     var kcresponsebody;
     var kcresponseparsed;
+    var totalkills;
+    var systemsarray;
+    var mostkillssystemid;
 
     // set up options for the get request
-    options = {
+    var options = {
         host:'api.eveonline.com',
         path:'/map/Kills.xml.aspx'
     };
@@ -93,18 +93,38 @@ var killcountupdate = function(data) {
         res.addListener('end', function() {
             // parse the xml in the responsebody into JSON
             xmlsimple.parse(kcresponsebody, function(e, parsed) {
-                console.log(parsed);
+                // console.log(parsed);
                 kcresponseparsed = parsed;
             });
-            // publish updatekillcount event to the client
-            // socket.emit("updatekillcount", kcresponseparsed);
+            // update the total kills and single system kills values
+            totalkills = 0;
+            datapoints.mostkillssystemcount = 0;
+
+            // count kills
+            systemsarray = kcresponseparsed.result.rowset.row;
+            for(i in systemsarray) {
+                // total kills
+                if (!isNaN(parseInt(systemsarray[i]['@'].shipKills))) {
+                    // only add up results that are not NaN (which sometimes happens)...
+                    datapoints.totalkills += parseInt(systemsarray[i]['@'].shipKills);
+                }
+
+                // system with most kills
+                if (parseInt(systemsarray[i]['@'].shipKills) >= datapoints.mostkillssystemcount) {
+                    datapoints.mostkillssystemcount = parseInt(systemsarray[i]['@'].shipKills);
+                    mostkillssystemid = systemsarray[i]['@'].solarSystemID;
+                }
+            };
+            systemnamelookup(mostkillssystemid);
         });
     }).on('error', function(err) {
         console.error(err);
     });
 };
+// fetch initial results
 killcountupdate();
-setInterval(killcountupdate, 300000);
+// update every 10 minutes
+setInterval(killcountupdate, 600000);
 
 var systemnamelookup = function(data) {
     // local vars
@@ -112,7 +132,7 @@ var systemnamelookup = function(data) {
     var syresponseparsed;
 
     // set up options for the get request
-    options = {
+    var options = {
         host:'api.eveonline.com',
         path:'/eve/CharacterName.xml.aspx?IDs=' + data
     };
@@ -127,11 +147,11 @@ var systemnamelookup = function(data) {
         res.addListener('end', function() {
             // parse the xml in the responsebody into JSON
             xmlsimple.parse(syresponsebody, function(e, parsed) {
-                console.log(parsed);
+                // console.log(parsed);
                 syresponseparsed = parsed;
             });
-            // publish lookupsystemname event to the client
-            // socket.emit("lookupsystemname", syresponseparsed);
+            // update the most-kills system value
+            datapoints.mostkillssystem = syresponseparsed.result.rowset.row['@']['name'];
         });
     }).on('error', function(err) {
         console.error(err);
@@ -144,7 +164,7 @@ var marketdataupdate = function(data) {
     var mkresponseparsed;
 
     // set up options for the get request
-    options = {
+    var options = {
         host:'api.eve-central.com',
         path:'/api/marketstat?typeid=34&typeid=37&typeid=40&typeid=16649&typeid=16273&typeid=24698',
         port:80
@@ -160,15 +180,22 @@ var marketdataupdate = function(data) {
         res.addListener('end', function() {
             // parse the xml in the responsebody into JSON
             xmlsimple.parse(mkresponsebody, function(e, parsed) {
-                console.log(parsed);
+                // console.log(parsed);
                 mkresponseparsed = parsed;
             });
-            // publish updatekillcount event to the client
-            // socket.emit("updatemarketdata", mkresponseparsed);
+            // update market item values
+            datapoints.pricetritanium = mkresponseparsed.marketstat.type[0].sell.avg;
+            datapoints.priceisogen = mkresponseparsed.marketstat.type[1].sell.avg;
+            datapoints.pricemegacyte = mkresponseparsed.marketstat.type[2].sell.avg;
+            datapoints.pricetechnetium = mkresponseparsed.marketstat.type[3].sell.avg;
+            datapoints.priceliquidozone = mkresponseparsed.marketstat.type[4].sell.avg;
+            datapoints.pricedrake = mkresponseparsed.marketstat.type[5].sell.avg;
         });
     });
 };
+// fetch initial results
 marketdataupdate();
+//update every 5 minutes
 setInterval(marketdataupdate, 300000);
 
 // listen for websocket connections from the client
