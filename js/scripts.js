@@ -67,17 +67,17 @@ $(document).ready( function() {
     socket.on('updateall', function (data) {
         // update the view and whatnot
         containertranquilitystatus.text(data.tranquilitystatus);
-        containerplayersonline.text(data.playersonline);
-        containertotalkills.text(data.totalkills);
+        containerplayersonline.text(data.playersonline).digits();
+        containertotalkills.text(data.totalkills).digits();
         containermostkillssystem.text(data.mostkillssystem);
-        containermostkillssystemcount.text(data.mostkillssystemcount);
+        containermostkillssystemcount.text(data.mostkillssystemcount).digits();
         containermostkillssystemlabel.text(data.mostkillssystem);
-        containertritanium.text(data.pricetritanium);
-        containerisogen.text(data.priceisogen);
-        containermegacyte.text(data.pricemegacyte);
-        containertechnetium.text(data.pricetechnetium);
-        containerliquidozone.text(data.priceliquidozone);
-        containerdrake.text(data.pricedrake);
+        containertritanium.text(data.pricetritanium).digits();
+        containerisogen.text(data.priceisogen).digits();
+        containermegacyte.text(data.pricemegacyte).digits();
+        containertechnetium.text(data.pricetechnetium).digits();
+        containerliquidozone.text(data.priceliquidozone).digits();
+        containerdrake.text(data.pricedrake).digits();
     });
 
     // ask node server for current data, then update every 5 minutes
