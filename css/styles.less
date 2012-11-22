@@ -99,7 +99,29 @@ body {
  Mobile Styles
  * * * * * * * * * * * * * * * */
 
+@media only screen and (max-width: 767px) {
 
+    body {
+        background: rgba(0, 0, 0, 1.0) url(../img/bg2-mobile.png) 50% 0 no-repeat;
+
+        .container {
+
+            .row {
+
+                .block {
+
+                    .label {
+                        font-size: 1em;
+                    }
+
+                    .value {
+                        font-size: 3em;
+                    }
+                }
+            }
+        }
+    }
+}
 
 /*
  Mixins, Vars, Other

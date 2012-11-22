@@ -31,14 +31,14 @@ $(document).ready( function() {
     });
 
     // time
-    // use system time for starters, in case time api fails...
+    // use system time as a default, in case time api fails...
     var now = moment.utc();
 
     $.ajax({
         url: 'http://timeapi.org/utc/now.json?callback=gettime',
         dataType: 'jsonp',
         success: function(data) {
-            // ...adjust time based on api response
+            // ...reset time based on api response
             now = moment.utc(data.dateString)
         },
         error: function(data) {
