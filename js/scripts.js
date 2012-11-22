@@ -1,10 +1,10 @@
 $(document).ready( function() {
 
     // set up socket.io connection
-    var socket = io.connect("http://localhost:1111");
+    var socket = io.connect('http://localhost:1111');
 
     // container vars
-    var warningcontainer = $(".warning");
+    var warningcontainer = $('.warning');
     var containertimehours = $('.time .hours span');
     var containertimeminutes = $('.time .minutes span');
     var containertimeseconds = $('.time .seconds span');
@@ -25,9 +25,9 @@ $(document).ready( function() {
     var containerdrake = $('.price.drake .value');
 
     // nofications
-    socket.on("notify", function (data) {
+    socket.on('notify', function (data) {
         warningcontainer.text(data);
-        warningcontainer.css("visibility", "visible");
+        warningcontainer.css('visibility', 'visible');
     });
 
     // time
@@ -36,7 +36,7 @@ $(document).ready( function() {
 
     $.ajax({
         url: 'http://timeapi.org/utc/now.json?callback=gettime',
-        dataType: "jsonp",
+        dataType: 'jsonp',
         success: function(data) {
             // ...adjust time based on api response
             now = moment.utc(data.dateString)

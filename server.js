@@ -1,6 +1,6 @@
 // import modules
-var http = require("http");
-var https = require("https");
+var http = require('http');
+var https = require('https');
 var xmlsimple = require('xml-simple');
 
 // set up a node server on port 8000 with the express module
@@ -10,7 +10,7 @@ var app = express();
 app.listen(8000);
 
 // create a socket.io server on port 1111
-var io = require("socket.io").listen(1111);
+var io = require('socket.io').listen(1111);
 
 // data points
 var datapoints = {
@@ -199,11 +199,11 @@ marketdataupdate();
 setInterval(marketdataupdate, 300000);
 
 // listen for websocket connections from the client
-io.sockets.on("connection", function (socket) {
+io.sockets.on('connection', function (socket) {
 
     // listen for getupdates event from the client
-    socket.on("getupdates", function (data) {
-        socket.emit("updateall", datapoints);
+    socket.on('getupdates', function (data) {
+        socket.emit('updateall', datapoints);
     });
 
 });
