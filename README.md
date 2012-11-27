@@ -6,14 +6,14 @@ A real-time stats dashboard for Eve Online, pulling data from the [official EVE 
 
 ## Built With
 
-[node](https://github.com/joyent/node)
-[less](https://github.com/cloudhead/less.js)
-[jquery](https://github.com/jquery/jquery)
-[moment](https://github.com/timrwood/moment/)
-[html5shiv](https://github.com/aFarkas/html5shiv)
-[skeleton](https://github.com/dhgamache/Skeleton)
-[normalize](https://github.com/necolas/normalize.css)
-[timeapi.org](http://www.timeapi.org/)
+* [node](https://github.com/joyent/node)
+* [less](https://github.com/cloudhead/less.js)
+* [jquery](https://github.com/jquery/jquery)
+* [moment](https://github.com/timrwood/moment/)
+* [html5shiv](https://github.com/aFarkas/html5shiv)
+* [skeleton](https://github.com/dhgamache/Skeleton)
+* [normalize](https://github.com/necolas/normalize.css)
+* [timeapi.org](http://www.timeapi.org/)
 
 ## Contact
 
