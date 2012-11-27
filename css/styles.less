@@ -19,6 +19,40 @@ body {
         opacity: .5;
     }
 
+    .theme-select {
+        position: absolute;
+        top: 2em;
+        right: 2em;
+        width: 10px;
+
+        div {
+            border: 1px solid rgba(255, 255, 255, 1.0);
+            height: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+
+            &.theme-orange {
+                background: rgba(160, 83, 31, 1.0);
+            }
+
+            &.theme-yellow {
+                background: rgba(228, 215, 183, 1.0);
+            }
+
+            &.theme-red {
+                background: rgba(199, 81, 57, 1.0);
+            }
+
+            &.theme-blue {
+                background: rgba(111, 150, 157, 1.0);
+            }
+
+            &.theme-sfw {
+                background: rgba(255, 255, 255, 1.0);
+            }
+        }
+    }
+
     .container {
         margin: 0 auto;
         padding-top: 2em;
@@ -96,6 +130,89 @@ body {
 }
 
 /*
+ Alternate Themes
+ * * * * * * * * * * * * * * * */
+
+body.theme-orange {
+    background: rgba(0, 0, 0, 1.0) url(../img/bg1.png) 50% 0 no-repeat;
+}
+
+body.theme-yellow {
+    background: rgba(0, 0, 0, 1.0) url(../img/bg2.png) 50% 0 no-repeat;
+}
+
+body.theme-red {
+    background: rgba(0, 0, 0, 1.0) url(../img/bg3.png) 50% 0 no-repeat;
+}
+
+body.theme-blue {
+    background: rgba(0, 0, 0, 1.0) url(../img/bg4.png) 50% 0 no-repeat;
+}
+
+body.theme-sfw {
+    font-family: 'helvetica', 'arial', sans-serif;
+    color: rgba(50, 50, 50, 1.0);
+    background: rgba(255, 255, 255, 1.0);
+
+    .theme-select {
+        display: none;
+    }
+
+    .container {
+        margin: 0;
+        padding: 0;
+
+        .alpha, .omega {
+            text-align: left;
+        }
+
+        .offset-by-one {
+            padding-left: 0;
+        }
+
+        .row {
+
+            .columns {
+                float: none;
+                margin: 0 !important;
+                padding: 0;
+
+                .block {
+                    background: none;
+                    padding: 0;
+                    margin-bottom: 10px;
+
+                    .label {
+                        font-size: 14px;
+                        display: inline-block;
+                        width: 300px;
+                    }
+
+                    .value {
+                        font-size: 14px;
+                        display: inline;
+                    }
+
+                    &.datetime {
+
+                        .date {
+                            display: inline-block;
+                            .rotate(0deg);
+                            font-size: 14px;
+                            position: static;
+                        }
+                    }
+
+                    &.support, &.credits {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+}
+
+/*
  Mobile Styles
  * * * * * * * * * * * * * * * */
 
@@ -103,6 +220,10 @@ body {
 
     body {
         background: rgba(0, 0, 0, 1.0) url(../img/bg2-mobile.png) 50% 0 no-repeat;
+
+        .theme-select {
+            display: none;
+        }
 
         .container {
 

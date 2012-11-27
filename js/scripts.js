@@ -81,4 +81,10 @@ $(document).ready( function() {
     getnewdata();
     setInterval(getnewdata, 300000);
 
+    // alternate themes
+    $('.theme-select div').click( function(e) {
+        $('body').attr('class', '');
+        $('body').addClass($(this).attr('class'));
+    })
+
 });
