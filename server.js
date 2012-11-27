@@ -189,7 +189,7 @@ var marketdataupdate = function(data) {
             datapoints.pricemegacyte = mkresponseparsed.marketstat.type[2].sell.avg;
             datapoints.pricetechnetium = mkresponseparsed.marketstat.type[3].sell.avg;
             datapoints.priceliquidozone = mkresponseparsed.marketstat.type[4].sell.avg;
-            datapoints.pricedrake = mkresponseparsed.marketstat.type[5].sell.avg;
+            datapoints.pricedrake = mkresponseparsed.marketstat.type[5].sell.avg.split(".")[0];
         });
     });
 };
