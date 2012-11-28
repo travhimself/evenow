@@ -4,10 +4,8 @@ var https = require('https');
 var xmlsimple = require('xml-simple');
 
 // set up a node server on port 8000 with the express module
-// var app = require('express').createServer();
 var express = require('express');
 var app = express();
-app.listen(8000);
 
 // create a socket.io server on port 1111
 var io = require('socket.io').listen(1111);
@@ -97,7 +95,7 @@ var killcountupdate = function(data) {
                 kcresponseparsed = parsed;
             });
             // update the total kills and single system kills values
-            totalkills = 0;
+            datapoints.totalkills = 0;
             datapoints.mostkillssystemcount = 0;
 
             // count kills
