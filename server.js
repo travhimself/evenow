@@ -181,13 +181,15 @@ var marketdataupdate = function(data) {
                 // console.log(parsed);
                 mkresponseparsed = parsed;
             });
-            // update market item values
-            datapoints.pricetritanium = mkresponseparsed.marketstat.type[0].sell.avg;
-            datapoints.priceisogen = mkresponseparsed.marketstat.type[1].sell.avg;
-            datapoints.pricemegacyte = mkresponseparsed.marketstat.type[2].sell.avg;
-            datapoints.pricetechnetium = mkresponseparsed.marketstat.type[3].sell.avg;
-            datapoints.priceliquidozone = mkresponseparsed.marketstat.type[4].sell.avg;
-            datapoints.pricedrake = mkresponseparsed.marketstat.type[5].sell.avg.split(".")[0];
+            // update market item values IF the response was successfully parsed; if mkresponseparsed is undefined (which sometimes happens if the API hit fails), the whole app can crash
+            if ( typeof mkresponseparsed != 'undefined' ) {
+                datapoints.pricetritanium = mkresponseparsed.marketstat.type[0].sell.avg;
+                datapoints.priceisogen = mkresponseparsed.marketstat.type[1].sell.avg;
+                datapoints.pricemegacyte = mkresponseparsed.marketstat.type[2].sell.avg;
+                datapoints.pricetechnetium = mkresponseparsed.marketstat.type[3].sell.avg;
+                datapoints.priceliquidozone = mkresponseparsed.marketstat.type[4].sell.avg;
+                datapoints.pricedrake = mkresponseparsed.marketstat.type[5].sell.avg.split(".")[0];
+            }
         });
     });
 };
