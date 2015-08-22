@@ -12,6 +12,7 @@ var io = require('socket.io').listen(1111);
 
 // data points
 var datapoints = {
+    notifications: new Object(),
     tranquilitystatus: '',
     playersonline: 0,
     totalkills: 0,
@@ -57,9 +58,11 @@ var tranquilityupdate = function(data) {
                 datapoints.tranquilitystatus = 'Offline';
             }
             datapoints.playersonline = tqresponseparsed.result.onlinePlayers;
+            delete datapoints.notifications['serverstatusapi'];
         });
     }).on('error', function(err) {
         console.error(err);
+        datapoints.notifications['serverstatusapi'] = '* There was an error with the EVE Online server status API. Tranquility status may be inaccurate.';
     });
 };
 // fetch initial results
@@ -114,9 +117,11 @@ var killcountupdate = function(data) {
                 }
             };
             systemnamelookup(mostkillssystemid);
+            delete datapoints.notifications['killsapi'];
         });
     }).on('error', function(err) {
         console.error(err);
+        datapoints.notifications['killsapi'] = '* There was an error with the EVE Online kills API. Ships Destroyed may be inaccurate.';
     });
 };
 // fetch initial results
@@ -150,9 +155,11 @@ var systemnamelookup = function(data) {
             });
             // update the most-kills system value
             datapoints.mostkillssystem = syresponseparsed.result.rowset.row['@']['name'];
+            delete datapoints.notifications['charactersapi'];
         });
     }).on('error', function(err) {
         console.error(err);
+        datapoints.notifications['charactersapi'] = '* There was an error with the EVE Online characters API. Most Ships Destroyed may be inaccurate.';
     });
 };
 
@@ -164,7 +171,7 @@ var marketdataupdate = function(data) {
     // set up options for the get request
     var options = {
         host:'api.eve-central.com',
-        path:'/api/marketstat?typeid=34&typeid=37&typeid=40&typeid=16649&typeid=16273&typeid=24698',
+        path:'/api/marketstat?typeid=34&typeid=37&typeid=40&typeid=16649&typeid=16273&typeid=24698&regionlimit=10000002&regionlimit=10000043&regionlimit=10000030&regionlimit=10000032&regionlimit=10000042',
         port:80
     };
 
@@ -181,15 +188,18 @@ var marketdataupdate = function(data) {
                 // console.log(parsed);
                 mkresponseparsed = parsed;
             });
-            // update market item values IF the response was successfully parsed; if mkresponseparsed is undefined (which sometimes happens if the API hit fails), the whole app can crash
-            if ( typeof mkresponseparsed != 'undefined' ) {
+            // update market item values; eve-central API is unreliable, and doesn't always throw us a helpful error if something goes wrong, so we handle timeout things a little differently here
+            if (typeof mkresponseparsed === 'undefined') {
+                datapoints.notifications['evecentral'] = '* There was an error with the EVE Central markerstat API. Market data may be inaccurate.';
+            } else {
+                delete datapoints.notifications['evecentral'];
                 datapoints.pricetritanium = mkresponseparsed.marketstat.type[0].sell.avg;
                 datapoints.priceisogen = mkresponseparsed.marketstat.type[1].sell.avg;
                 datapoints.pricemegacyte = mkresponseparsed.marketstat.type[2].sell.avg;
                 datapoints.pricetechnetium = mkresponseparsed.marketstat.type[3].sell.avg;
                 datapoints.priceliquidozone = mkresponseparsed.marketstat.type[4].sell.avg;
                 datapoints.pricedrake = mkresponseparsed.marketstat.type[5].sell.avg.split(".")[0];
-            }
+            };
         });
     });
 };

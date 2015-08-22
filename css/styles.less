@@ -4,20 +4,11 @@
 
 body {
     font-family: 'din', 'helvetica neue', 'helvetica', 'arial', sans-serif;
+    -webkit-font-smoothing: antialiased;
     text-transform: uppercase;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, .1);
     color: rgba(255, 255, 255, 1.0);
     background: rgba(0, 0, 0, 1.0) url(../img/bg2.png) 50% 0 no-repeat;
-
-    .warning {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        left: 10px;
-        visibility: hidden;
-        color: red;
-        opacity: .5;
-    }
 
     .theme-select {
         position: absolute;
@@ -83,24 +74,29 @@ body {
                     line-height: 1.1;
                 }
 
-                &.datetime {
-                    position: relative;
+                &.notifications {
+                    display: none;
+                    background: transparent;
+                    color: red;
+                    opacity: .5;
+                    text-align: left;
+                }
 
-                    .time {
-                        margin-right: 20px;
-                    }
+                &.datetime {
 
                     .date {
-                        .rotate(-90deg);
-                        font-size: 17px;
+                        display: inline-block;
+                        font-size: 18px;
                         font-weight: 500;
-                        position: absolute;
-                        top: 71px;
-                        right: -2px;
+                        margin-right: 5px;
 
                         .year {
                             display: none;
                         }
+                    }
+
+                    .time {
+                        display: inline-block;
                     }
                 }
 
@@ -203,7 +199,7 @@ body.theme-sfw {
                         }
                     }
 
-                    &.support, &.credits {
+                    &.support, &.credits, &.notifications {
                         display: none;
                     }
                 }

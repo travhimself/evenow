@@ -4,7 +4,7 @@ $(document).ready( function() {
     var socket = io.connect('http://localhost:1111');
 
     // container vars
-    var warningcontainer = $('.warning');
+    var containernotification = $('.notifications');
     var containertimehours = $('.time .hours span');
     var containertimeminutes = $('.time .minutes span');
     var containertimeseconds = $('.time .seconds span');
@@ -23,12 +23,6 @@ $(document).ready( function() {
     var containertechnetium = $('.price.technetium .value');
     var containerliquidozone = $('.price.liquidozone .value');
     var containerdrake = $('.price.drake .value');
-
-    // nofications
-    socket.on('notify', function (data) {
-        warningcontainer.text(data);
-        warningcontainer.css('visibility', 'visible');
-    });
 
     // time
     // use system time as a default, in case time api fails...
@@ -60,6 +54,19 @@ $(document).ready( function() {
 
     // display/update the data
     socket.on('updateall', function (data) {
+        // notifications, if any exist
+        if (Object.keys(data.notifications).length > 0) {
+            containernotification.text('');
+            containernotification.show();
+            $.each(data.notifications, function(i, v) {
+                containernotification.append(v + '<br>');
+            });
+        } else {
+            containernotification.text('');
+            containernotification.hide();
+        };
+
+        // API data
         containertranquilitystatus.text(data.tranquilitystatus);
         containerplayersonline.text(data.playersonline).digits();
         containertotalkills.text(data.totalkills).digits();
