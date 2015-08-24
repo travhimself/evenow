@@ -24,21 +24,8 @@ $(document).ready( function() {
     var containerliquidozone = $('.price.liquidozone .value');
     var containerdrake = $('.price.drake .value');
 
-    // time
-    // use system time as a default, in case time api fails...
+    // determine time in utc based on system date/time
     var now = moment.utc();
-
-    $.ajax({
-        url: 'http://timeapi.org/utc/now.json?callback=gettime',
-        dataType: 'jsonp',
-        success: function(data) {
-            // ...reset time based on api response
-            now = moment.utc(data.dateString)
-        },
-        error: function(data) {
-            // error handling
-        }
-    });
 
     // set date and time in the view
     var rendertime = function() {
