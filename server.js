@@ -50,15 +50,16 @@ var tranquilityupdate = function(data) {
             xmlsimple.parse(tqresponsebody, function(e, parsed) {
                 // console.log(parsed);
                 tqresponseparsed = parsed;
+
+                // update the server status and player count values
+                if ( tqresponseparsed.result.serverOpen == 'True' ) {
+                    datapoints.tranquilitystatus = 'Online';
+                } else {
+                    datapoints.tranquilitystatus = 'Offline';
+                }
+                datapoints.playersonline = tqresponseparsed.result.onlinePlayers;
+                delete datapoints.notifications['serverstatusapi'];
             });
-            // update the server status and player count values
-            if ( tqresponseparsed.result.serverOpen == 'True' ) {
-                datapoints.tranquilitystatus = 'Online';
-            } else {
-                datapoints.tranquilitystatus = 'Offline';
-            }
-            datapoints.playersonline = tqresponseparsed.result.onlinePlayers;
-            delete datapoints.notifications['serverstatusapi'];
         });
     }).on('error', function(err) {
         console.error(err);
@@ -96,28 +97,29 @@ var killcountupdate = function(data) {
             xmlsimple.parse(kcresponsebody, function(e, parsed) {
                 // console.log(parsed);
                 kcresponseparsed = parsed;
+
+                // update the total kills and single system kills values
+                datapoints.totalkills = 0;
+                datapoints.mostkillssystemcount = 0;
+
+                // count kills
+                systemsarray = kcresponseparsed.result.rowset.row;
+                for(i in systemsarray) {
+                    // total kills
+                    if (!isNaN(parseInt(systemsarray[i]['@'].shipKills))) {
+                        // only add up results that are not NaN (which sometimes happens)...
+                        datapoints.totalkills += parseInt(systemsarray[i]['@'].shipKills);
+                    }
+
+                    // system with most kills
+                    if (parseInt(systemsarray[i]['@'].shipKills) >= datapoints.mostkillssystemcount) {
+                        datapoints.mostkillssystemcount = parseInt(systemsarray[i]['@'].shipKills);
+                        mostkillssystemid = systemsarray[i]['@'].solarSystemID;
+                    }
+                };
+                systemnamelookup(mostkillssystemid);
+                delete datapoints.notifications['killsapi'];
             });
-            // update the total kills and single system kills values
-            datapoints.totalkills = 0;
-            datapoints.mostkillssystemcount = 0;
-
-            // count kills
-            systemsarray = kcresponseparsed.result.rowset.row;
-            for(i in systemsarray) {
-                // total kills
-                if (!isNaN(parseInt(systemsarray[i]['@'].shipKills))) {
-                    // only add up results that are not NaN (which sometimes happens)...
-                    datapoints.totalkills += parseInt(systemsarray[i]['@'].shipKills);
-                }
-
-                // system with most kills
-                if (parseInt(systemsarray[i]['@'].shipKills) >= datapoints.mostkillssystemcount) {
-                    datapoints.mostkillssystemcount = parseInt(systemsarray[i]['@'].shipKills);
-                    mostkillssystemid = systemsarray[i]['@'].solarSystemID;
-                }
-            };
-            systemnamelookup(mostkillssystemid);
-            delete datapoints.notifications['killsapi'];
         });
     }).on('error', function(err) {
         console.error(err);
@@ -152,10 +154,11 @@ var systemnamelookup = function(data) {
             xmlsimple.parse(syresponsebody, function(e, parsed) {
                 // console.log(parsed);
                 syresponseparsed = parsed;
+
+                // update the most-kills system value
+                datapoints.mostkillssystem = syresponseparsed.result.rowset.row['@']['name'];
+                delete datapoints.notifications['charactersapi'];
             });
-            // update the most-kills system value
-            datapoints.mostkillssystem = syresponseparsed.result.rowset.row['@']['name'];
-            delete datapoints.notifications['charactersapi'];
         });
     }).on('error', function(err) {
         console.error(err);
@@ -187,19 +190,20 @@ var marketdataupdate = function(data) {
             xmlsimple.parse(mkresponsebody, function(e, parsed) {
                 // console.log(parsed);
                 mkresponseparsed = parsed;
+
+                // update market item values; eve-central API is unreliable, and doesn't always throw us a helpful error if something goes wrong, so we handle timeout things a little differently here
+                if (typeof mkresponseparsed === 'undefined') {
+                    datapoints.notifications['evecentral'] = '* There was an error with the EVE Central markerstat API. Market data may be inaccurate.';
+                } else {
+                    delete datapoints.notifications['evecentral'];
+                    datapoints.pricetritanium = mkresponseparsed.marketstat.type[0].sell.avg;
+                    datapoints.priceisogen = mkresponseparsed.marketstat.type[1].sell.avg;
+                    datapoints.pricemegacyte = mkresponseparsed.marketstat.type[2].sell.avg;
+                    datapoints.pricetechnetium = mkresponseparsed.marketstat.type[3].sell.avg;
+                    datapoints.priceliquidozone = mkresponseparsed.marketstat.type[4].sell.avg;
+                    datapoints.pricedrake = mkresponseparsed.marketstat.type[5].sell.avg.split(".")[0];
+                };
             });
-            // update market item values; eve-central API is unreliable, and doesn't always throw us a helpful error if something goes wrong, so we handle timeout things a little differently here
-            if (typeof mkresponseparsed === 'undefined') {
-                datapoints.notifications['evecentral'] = '* There was an error with the EVE Central markerstat API. Market data may be inaccurate.';
-            } else {
-                delete datapoints.notifications['evecentral'];
-                datapoints.pricetritanium = mkresponseparsed.marketstat.type[0].sell.avg;
-                datapoints.priceisogen = mkresponseparsed.marketstat.type[1].sell.avg;
-                datapoints.pricemegacyte = mkresponseparsed.marketstat.type[2].sell.avg;
-                datapoints.pricetechnetium = mkresponseparsed.marketstat.type[3].sell.avg;
-                datapoints.priceliquidozone = mkresponseparsed.marketstat.type[4].sell.avg;
-                datapoints.pricedrake = mkresponseparsed.marketstat.type[5].sell.avg.split(".")[0];
-            };
         });
     });
 };
