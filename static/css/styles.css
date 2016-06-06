@@ -1,0 +1,156 @@
+/* Styles
+================================================== */
+body {
+  background: #000 url(../img/bg-moon.png) right 0 no-repeat fixed;
+  background-size: cover;
+  color: #fff;
+  font-family: 'Abel', Arial, serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+body ::selection {
+  background: rgba(0, 0, 0, 0.3);
+}
+body .container-fluid {
+  margin: 2em 0;
+}
+body .container-fluid .row .flush {
+  padding: 0;
+}
+body .container-fluid .row [class^="col-"] {
+  margin-bottom: 2em;
+}
+body .container-fluid .row [class^="col-"] .block {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 2em;
+}
+body h1,
+body h2,
+body h3,
+body h4 {
+  text-transform: uppercase;
+  margin: 0;
+}
+body h1,
+body h2 {
+  letter-spacing: 2px;
+}
+body .worlditem h2 {
+  text-align: center;
+}
+body .worlditem.time {
+  position: relative;
+}
+body .worlditem.time h2 {
+  text-align: left;
+}
+body .worlditem.time .timer {
+  position: absolute;
+  top: 50%;
+  right: 2em;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+}
+body .worlditem.time .timer svg {
+  display: block;
+}
+body .worlditem.time .timer .bg {
+  opacity: .2;
+}
+body .worlditem.time .timer .fg {
+  opacity: .8;
+}
+body .worlditem.time .timer.waiting .fg {
+  stroke-dasharray: 250;
+  stroke-dashoffset: 250;
+  animation: timeranimation 60s linear normal infinite;
+}
+@keyframes timeranimation {
+  from {
+    stroke-dashoffset: 250;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+body .marketitem .typename {
+  margin-bottom: .5em;
+}
+body .marketitem .averageprice {
+  margin-bottom: .5em;
+}
+body .marketitem .averageprice .change {
+  margin-left: 4px;
+}
+body .marketitem .averageprice .change svg {
+  width: 8px;
+  height: 8px;
+}
+body .marketitem .averageprice .change.negative svg {
+  transform: rotate(180deg);
+}
+body .marketitem .volume .label {
+  font-size: .8em;
+  text-transform: capitalize;
+}
+body .marketitem canvas {
+  width: 100%;
+  height: 100px;
+}
+body footer {
+  margin-bottom: 5em;
+}
+body footer [class^="col-"] {
+  margin-bottom: 0 !important;
+}
+body footer [class^="col-"] div {
+  height: 32px;
+  line-height: 32px;
+  margin: 2em;
+  color: rgba(255, 255, 255, 0.4);
+}
+body footer .apistatus {
+  font-style: italic;
+}
+body footer .info a:link,
+body footer .info a:visited {
+  color: rgba(255, 255, 255, 0.6);
+}
+body footer .info a:hover,
+body footer .info a:active {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: underline;
+}
+/* Vars and Mixins
+================================================== */
+.thinfont {
+  -webkit-font-smoothing: antialiased;
+}
+.imagereplace {
+  border: 0;
+  font: 0/0 a;
+  text-shadow: none;
+  color: transparent;
+  background-color: transparent;
+}
+.pseudoelem {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.clearfix {
+  zoom: 1;
+}
+.clearfix:before,
+.clearfix:after {
+  content: "";
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+}

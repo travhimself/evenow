@@ -1,0 +1,224 @@
+/* Styles
+================================================== */
+
+body {
+    background: #000 url(../img/bg-moon.png) right 0 no-repeat fixed;
+    background-size: cover;
+    color: @colorbody;
+    font-family: 'Abel', Arial, serif;
+    font-weight: 400;
+    .thinfont;
+
+    ::selection {
+        background: rgba(0, 0, 0, .3);
+    }
+
+    .container-fluid {
+        margin: 2em 0;
+
+        .row {
+
+            .flush {
+                padding: 0;
+            }
+
+            [class^="col-"] {
+                margin-bottom: 2em;
+
+                .block {
+                    background: rgba(0, 0, 0, .6);
+                    padding: 2em;
+                }
+            }
+        }
+    }
+
+    h1, h2, h3, h4 {
+        text-transform: uppercase;
+        margin: 0;
+    }
+
+    h1, h2 {
+        letter-spacing: 2px;
+    }
+
+    .worlditem {
+
+        h2 {
+            text-align: center;
+        }
+
+        &.time {
+            position: relative;
+
+            h2 {
+                text-align: left;
+            }
+
+            .timer {
+                position: absolute;
+                top: 50%;
+                right: 2em;
+                transform: translateY(-50%);
+                width: 32px;
+                height: 32px;
+
+                svg {
+                    display: block;
+                }
+
+                .bg {
+                    opacity: .2;
+                }
+
+                .fg {
+                    opacity: .8;
+                }
+
+                &.waiting {
+
+                    .fg {
+                        // since we can't really know the length of the path without js, it must be obtained with:
+                        // length = document.querySelector('.path').getTotalLength();
+                        // this should be recalculated if/when the dimensions of the timer are changed
+                        stroke-dasharray: 250;
+                        stroke-dashoffset: 250;
+                        animation: timeranimation 60s linear normal infinite;
+                    }
+                }
+
+                @keyframes timeranimation {
+
+                    from {
+                        stroke-dashoffset: 250;
+                    }
+
+                    to {
+                        stroke-dashoffset: 0;
+                    }
+                }
+            }
+        }
+    }
+
+    .marketitem {
+
+        .typename {
+            margin-bottom: .5em;
+        }
+
+        .averageprice {
+            margin-bottom: .5em;
+
+            .change {
+                margin-left: 4px;
+
+                svg {
+                    width: 8px;
+                    height: 8px;
+                }
+
+                &.negative {
+
+                    svg {
+                        transform: rotate(180deg);
+                    }
+                }
+            }
+        }
+
+        .volume {
+            .label {
+                font-size: .8em;
+                text-transform: capitalize;
+            }
+        }
+
+        canvas {
+            width: 100%;
+            height: 100px;
+        }
+    }
+
+    footer {
+        margin-bottom: 5em;
+
+        [class^="col-"] {
+            margin-bottom: 0 !important;
+
+            div {
+                height: 32px;
+                line-height: 32px;
+                margin: 2em;
+                color: fade(@colorbody, 40%);
+            }
+        }
+
+        .apistatus {
+            font-style: italic;
+        }
+
+        .info {
+
+            a {
+
+                &:link,
+                &:visited {
+                    color: fade(@colorbody, 60%);
+                }
+
+                &:hover,
+                &:active {
+                    color: fade(@colorbody, 80%);
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+
+}
+
+
+/* Vars and Mixins
+================================================== */
+
+@colorbody: #fff;
+
+.thinfont {
+    // useful for light text on dark backgrounds, and other areas where fonts render too heavy
+    -webkit-font-smoothing: antialiased;
+}
+
+.imagereplace {
+    // hide body text in favor of a background image
+    border: 0;
+    font: 0/0 a;
+    text-shadow: none;
+    color: transparent;
+    background-color: transparent;
+}
+
+.pseudoelem {
+    // provide substance to get pseudo elements appearing; requires 'position: relative' on parent
+    content: '';
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.clearfix {
+    // new and improved clearfix
+    // from: http://nicolasgallagher.com/micro-clearfix-hack/
+    &:before,
+    &:after {
+        content: "";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
+    zoom: 1;
+}

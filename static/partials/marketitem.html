@@ -1,0 +1,14 @@
+<div class="block marketitem">
+    <h2 class="typename">{{ item.typename }}</h2>
+    <h2 class="averageprice">
+        {{ item.avghistory[0] / 100 | number:2 }}
+        <span class="change" ng-if="item.entries[0].avgchange" ng-class="{'negative': item.entries[0].avgchange < 0}">
+            <svg viewbox="0 0 10 10">
+                <path class="bg" d="M0 10 L5 0 L10 10 L0 10" fill="#fff" stroke-width="8" stroke="none" />
+            </svg>
+            {{ item.avgchange / 100 | number:2 }}
+        </span>
+    </h2>
+    <!-- <h3 class="volume">{{ item.volume | number }} <span class="label">units</span></h3> -->
+    <canvas id="chart{{ item.typeid }}"></canvas>
+</div>
