@@ -68,6 +68,7 @@ angular.module('evenowapp', []).controller('evenowcontroller', ['$scope', functi
                 },
                 options: {
                     // responsive: false,
+                    maintainAspectRatio: false,
                     animation: false,
                     legend: {
                         display: false

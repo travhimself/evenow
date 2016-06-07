@@ -104,6 +104,16 @@ var emitworlddata = function() {
 var callcounter = 0;
 
 
+// safe json parser (won't crash the app if we get a bad response, which sometimes happens)
+var jsonsafeparse = function(json) {
+    try {
+        return JSON.parse(json);
+    } catch(ex) {
+        return '';
+    }
+}
+
+
 // api call: server status
 var getserverstatus = function() {
 
@@ -122,7 +132,7 @@ var getserverstatus = function() {
         });
 
         res.addListener('end', function() {
-            var outputjson = JSON.parse(output);
+            var outputjson = jsonsafeparse(output);
             worlddata.serverstatus = outputjson.serviceStatus.eve;
             worlddata.playersonline = outputjson.userCounts.eve;
         });
@@ -153,7 +163,7 @@ var getincursions = function() {
         });
 
         res.addListener('end', function() {
-            var outputjson = JSON.parse(output);
+            var outputjson = jsonsafeparse(output);
             worlddata.incursionstate = outputjson.items[0].state;
             worlddata.incursionconstellation = outputjson.items[0].constellation.name;
             worlddata.incursionstaging = outputjson.items[0].stagingSolarSystem.name;
@@ -186,11 +196,16 @@ var getmarketdata = function() {
             });
 
             res.addListener('end', function() {
-                var outputjson = JSON.parse(output);
+                var outputjson = jsonsafeparse(output);
 
                 // set volume
                 item.volume = outputjson[0].sell.volume;
                 item.avgprice = outputjson[0].sell.fivePercent.toFixed(2)*100;
+
+                // if we get a 0 from eve-central (which does happen sometimes), use previous value
+                if ( item.avgprice == 0 && item.avghistory.length > 0 ) {
+                    item.avgprice = item.avghistory[0];
+                }
 
                 // add new history entry to the front of the array if we're at a log interval
                 if ( callcounter % s.marketloginterval == 0 ) {

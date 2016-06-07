@@ -106,9 +106,8 @@ body .marketitem .label {
   text-transform: lowercase;
   letter-spacing: 1px;
 }
-body .marketitem canvas {
-  width: 100%;
-  height: 100px;
+body .marketitem .canvaswrapper {
+  height: 6.5em;
 }
 body footer {
   margin-bottom: 0;

@@ -9,5 +9,7 @@
             {{ item.avgchange / 100 | humanizenumber }}
         </span>
     </h2>
-    <canvas id="chart{{ item.typeid }}"></canvas>
+    <div class="canvaswrapper">
+        <canvas id="chart{{ item.typeid }}"></canvas>
+    </div>
 </div>
