@@ -6,13 +6,13 @@ var s = {
         root: __dirname + '/static/views/',
         dotfiles: 'ignore'
     },
-    crestcallinterval: 60000, // interval between data fetches (1min)
-    evecentralcallinterval: 600000, // interval between data fetches (10min)
     sockettransmissioninteral: 60000, // interval between broadcast to clients (1min)
+    crestcallinterval: 60000, // interval between data fetches (1min)
+    evecentralcallinterval: 3600000, // interval between data fetches (1hour)
     marketsystem: 30000142, // jita
     marketwindow: 24, // window for eve-central searches, in hours
-    marketloginterval: 6, // log the data every x calls for avghistory (1hour)
-    marketdatamaxentries: 16 // number of history entries to show for each market item
+    marketloginterval: 4, // log the data every x calls for avghistory (4hours)
+    marketdatamaxentries: 18 // number of history entries to show for each market item (3days)
 };
 
 
@@ -101,8 +101,6 @@ var emitworlddata = function() {
     io.emit('updateworlddata', worlddata);
 };
 
-var callcounter = 0;
-
 
 // safe json parser (won't crash the app if we get a bad response, which sometimes happens)
 var jsonsafeparse = function(json) {
@@ -178,7 +176,15 @@ var getincursions = function() {
 
 
 // api call: market data
+var marketcallcounter = 0;
+var currentcallcount = 0;
 var getmarketdata = function() {
+
+    // snag current call count before we increment
+    currentcallcount = marketcallcounter;
+
+    // increment call marketcallcounter
+    marketcallcounter++;
 
     worlddata.commodities.concat(worlddata.rmtitems).forEach( function(item, index) {
         var output = '';
@@ -208,7 +214,7 @@ var getmarketdata = function() {
                 }
 
                 // add new history entry to the front of the array if we're at a log interval
-                if ( callcounter % s.marketloginterval == 0 ) {
+                if ( currentcallcount % s.marketloginterval == 0 ) {
                     item.avghistory.unshift(item.avgprice);
                 }
 
@@ -228,8 +234,5 @@ var getmarketdata = function() {
             worlddata.apistatusmarket = false;
         });
     });
-
-    // increment call callcounter
-    callcounter++;
 
 };
