@@ -35,11 +35,11 @@ body h1,
 body h2 {
   letter-spacing: 2px;
 }
+body .worlditem {
+  position: relative;
+}
 body .worlditem h2 {
   text-align: center;
-}
-body .worlditem.time {
-  position: relative;
 }
 body .worlditem.time h2 {
   text-align: left;
@@ -47,8 +47,8 @@ body .worlditem.time h2 {
 body .worlditem.time .timer {
   position: absolute;
   top: 50%;
-  right: 2em;
   transform: translateY(-50%);
+  right: 2em;
   width: 32px;
   height: 32px;
 }
@@ -74,32 +74,44 @@ body .worlditem.time .timer.waiting .fg {
     stroke-dashoffset: 0;
   }
 }
+body .marketitem.commodity {
+  height: 16em;
+}
+body .marketitem.rmt {
+  height: 16em;
+}
 body .marketitem .typename {
-  margin-bottom: .5em;
+  margin-bottom: .3em;
 }
 body .marketitem .averageprice {
   margin-bottom: .5em;
 }
 body .marketitem .averageprice .change {
+  color: #27ae60;
   margin-left: 4px;
+  font-size: .8em;
 }
 body .marketitem .averageprice .change svg {
   width: 8px;
   height: 8px;
 }
+body .marketitem .averageprice .change.negative {
+  color: #c0392b;
+}
 body .marketitem .averageprice .change.negative svg {
   transform: rotate(180deg);
 }
-body .marketitem .volume .label {
+body .marketitem .label {
   font-size: .8em;
-  text-transform: capitalize;
+  text-transform: lowercase;
+  letter-spacing: 1px;
 }
 body .marketitem canvas {
   width: 100%;
   height: 100px;
 }
 body footer {
-  margin-bottom: 5em;
+  margin-bottom: 0;
 }
 body footer [class^="col-"] {
   margin-bottom: 0 !important;
@@ -107,7 +119,7 @@ body footer [class^="col-"] {
 body footer [class^="col-"] div {
   height: 32px;
   line-height: 32px;
-  margin: 2em;
+  margin: 0 2em;
   color: rgba(255, 255, 255, 0.4);
 }
 body footer .apistatus {
@@ -127,30 +139,8 @@ body footer .info a:active {
 .thinfont {
   -webkit-font-smoothing: antialiased;
 }
-.imagereplace {
-  border: 0;
-  font: 0/0 a;
-  text-shadow: none;
-  color: transparent;
-  background-color: transparent;
-}
-.pseudoelem {
-  content: '';
+.valignmiddle {
   position: absolute;
-  z-index: -1;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-}
-.clearfix {
-  zoom: 1;
-}
-.clearfix:before,
-.clearfix:after {
-  content: "";
-  display: table;
-}
-.clearfix:after {
-  clear: both;
+  top: 50%;
+  transform: translateY(-50%);
 }

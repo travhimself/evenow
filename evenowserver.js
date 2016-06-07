@@ -7,11 +7,12 @@ var s = {
         dotfiles: 'ignore'
     },
     crestcallinterval: 60000, // interval between data fetches (1min)
-    evecentralcallinterval: 300000, // interval between data fetches (5min)
+    evecentralcallinterval: 600000, // interval between data fetches (10min)
     sockettransmissioninteral: 60000, // interval between broadcast to clients (1min)
     marketsystem: 30000142, // jita
-    marketwindow: 8, // window for eve-central searches, in hours
-    marketdatamaxentries: 12 // number of history entries to show for each market item
+    marketwindow: 24, // window for eve-central searches, in hours
+    marketloginterval: 6, // log the data every x calls for avghistory (1hour)
+    marketdatamaxentries: 16 // number of history entries to show for each market item
 };
 
 
@@ -48,6 +49,9 @@ var server = evenowexpressapp.listen(s.nodeport, function() {
     getserverstatus();
     setInterval(getserverstatus, s.crestcallinterval);
 
+    getincursions();
+    setInterval(getincursions, s.crestcallinterval);
+
     getmarketdata();
     setInterval(getmarketdata, s.evecentralcallinterval);
 
@@ -66,6 +70,9 @@ io.on('connection', function(socket) {
 var worlddata = {
     serverstatus: '',
     playersonline: 0,
+    incursionstate: '',
+    incursionconstellation: '',
+    incursionstaging: '',
     commodities: [
         {'typeid': 34, 'typename': 'tritanium', 'volume': 0, 'avgchange': 0, 'avghistory': []},
         {'typeid': 35, 'typename': 'pyerite', 'volume': 0, 'avgchange': 0, 'avghistory': []},
@@ -81,10 +88,10 @@ var worlddata = {
         // {'typeid': 17889, 'typename': 'hydrogen iso', 'volume': 0, 'avgchange': 0, 'avghistory': []}
     ],
     rmtitems: [
-        {'typeid': 29668, 'typename': 'plex', 'volume': 0, 'avgchange': 0, 'avghistory': []}
+        {'typeid': 29668, 'typename': 'plex', 'volume': 0, 'avgchange': 0, 'avghistory': []},
         // {'typeid': 32792, 'typename': '100 aurum token', 'volume': 0, 'avgchange': 0, 'avghistory': []},
         // {'typeid': 40519, 'typename': 'skill extractor', 'volume': 0, 'avgchange': 0, 'avghistory': []},
-        // {'typeid': 40520, 'typename': 'skill injector', 'volume': 0, 'avgchange': 0, 'avghistory': []}
+        {'typeid': 40520, 'typename': 'skill injector', 'volume': 0, 'avgchange': 0, 'avghistory': []}
     ],
     apistatusserver: true,
     apistatusmarket: true
@@ -93,6 +100,8 @@ var worlddata = {
 var emitworlddata = function() {
     io.emit('updateworlddata', worlddata);
 };
+
+var callcounter = 0;
 
 
 // api call: server status
@@ -126,6 +135,38 @@ var getserverstatus = function() {
 };
 
 
+// api call: incursions
+var getincursions = function() {
+
+    var output = '';
+    var options = {
+        host: 'crest-tq.eveonline.com',
+        path: '/incursions/'
+    };
+
+    https.get(options, function(res) {
+
+        res.setEncoding('utf8');
+
+        res.on('data', function(chunk) {
+            output += chunk;
+        });
+
+        res.addListener('end', function() {
+            var outputjson = JSON.parse(output);
+            worlddata.incursionstate = outputjson.items[0].state;
+            worlddata.incursionconstellation = outputjson.items[0].constellation.name;
+            worlddata.incursionstaging = outputjson.items[0].stagingSolarSystem.name;
+        });
+
+    }).on('error', function(err) {
+        console.error(err);
+        worlddata.apistatusserver = false;
+    });
+
+};
+
+
 // api call: market data
 var getmarketdata = function() {
 
@@ -149,13 +190,16 @@ var getmarketdata = function() {
 
                 // set volume
                 item.volume = outputjson[0].sell.volume;
+                item.avgprice = outputjson[0].sell.fivePercent.toFixed(2)*100;
 
-                // add new entry to the front of the array
-                item.avghistory.unshift(outputjson[0].sell.fivePercent.toFixed(2)*100);
+                // add new history entry to the front of the array if we're at a log interval
+                if ( callcounter % s.marketloginterval == 0 ) {
+                    item.avghistory.unshift(item.avgprice);
+                }
 
-                // calculate change over the last hour if we have enough data
-                if ( item.avghistory.length >= s.marketdatamaxentries ) {
-                    item.avgchange = item.avghistory[0] - item.avghistory[s.marketdatamaxentries-1];
+                // calculate change over the last interval
+                if ( item.avghistory.length > 1 ) {
+                    item.avgchange = item.avghistory[1] - item.avghistory[0];
                 }
 
                 // trim data in excess of the max entries setting
@@ -169,5 +213,8 @@ var getmarketdata = function() {
             worlddata.apistatusmarket = false;
         });
     });
+
+    // increment call callcounter
+    callcounter++;
 
 };

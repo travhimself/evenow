@@ -67,6 +67,7 @@ angular.module('evenowapp', []).controller('evenowcontroller', ['$scope', functi
                     }]
                 },
                 options: {
+                    // responsive: false,
                     animation: false,
                     legend: {
                         display: false
@@ -84,4 +85,30 @@ angular.module('evenowapp', []).controller('evenowcontroller', ['$scope', functi
 
         }
     };
-});
+})
+
+.filter('humanizenumber', ['numberFilter', function(numberFilter) {
+    return function(input) {
+
+        // humanize very large numbers
+        var units = '';
+        var output = input;
+
+        // billions
+        if ( input >= 1000000000 ) {
+            units = 'B';
+            output = input / 1000000000;
+        }
+
+        // millions
+        if ( input >= 1000000 ) {
+            units = 'M';
+            output = input / 1000000;
+        }
+
+        output = numberFilter(output, 2)
+
+        return output + units;
+
+    };
+}]);

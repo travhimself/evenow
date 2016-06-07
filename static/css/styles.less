@@ -43,23 +43,21 @@ body {
     }
 
     .worlditem {
+        position: relative;
 
         h2 {
             text-align: center;
         }
 
         &.time {
-            position: relative;
 
             h2 {
                 text-align: left;
             }
 
             .timer {
-                position: absolute;
-                top: 50%;
+                .valignmiddle;
                 right: 2em;
-                transform: translateY(-50%);
                 width: 32px;
                 height: 32px;
 
@@ -103,15 +101,25 @@ body {
 
     .marketitem {
 
+        &.commodity {
+            height: 16em;
+        }
+
+        &.rmt {
+            height: 16em;
+        }
+
         .typename {
-            margin-bottom: .5em;
+            margin-bottom: .3em;
         }
 
         .averageprice {
             margin-bottom: .5em;
 
             .change {
+                color: @colorpositive;
                 margin-left: 4px;
+                font-size: .8em;
 
                 svg {
                     width: 8px;
@@ -119,6 +127,7 @@ body {
                 }
 
                 &.negative {
+                    color: @colornegative;
 
                     svg {
                         transform: rotate(180deg);
@@ -128,10 +137,13 @@ body {
         }
 
         .volume {
-            .label {
-                font-size: .8em;
-                text-transform: capitalize;
-            }
+
+        }
+
+        .label {
+            font-size: .8em;
+            text-transform: lowercase;
+            letter-spacing: 1px;
         }
 
         canvas {
@@ -141,7 +153,7 @@ body {
     }
 
     footer {
-        margin-bottom: 5em;
+        margin-bottom: 0;
 
         [class^="col-"] {
             margin-bottom: 0 !important;
@@ -149,7 +161,7 @@ body {
             div {
                 height: 32px;
                 line-height: 32px;
-                margin: 2em;
+                margin: 0 2em;
                 color: fade(@colorbody, 40%);
             }
         }
@@ -183,42 +195,16 @@ body {
 ================================================== */
 
 @colorbody: #fff;
+@colorpositive: #27ae60;
+@colornegative: #c0392b;
 
 .thinfont {
     // useful for light text on dark backgrounds, and other areas where fonts render too heavy
     -webkit-font-smoothing: antialiased;
 }
 
-.imagereplace {
-    // hide body text in favor of a background image
-    border: 0;
-    font: 0/0 a;
-    text-shadow: none;
-    color: transparent;
-    background-color: transparent;
-}
-
-.pseudoelem {
-    // provide substance to get pseudo elements appearing; requires 'position: relative' on parent
-    content: '';
+.valignmiddle {
     position: absolute;
-    z-index: -1;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-}
-
-.clearfix {
-    // new and improved clearfix
-    // from: http://nicolasgallagher.com/micro-clearfix-hack/
-    &:before,
-    &:after {
-        content: "";
-        display: table;
-    }
-    &:after {
-        clear: both;
-    }
-    zoom: 1;
+    top: 50%;
+    transform: translateY(-50%);
 }
