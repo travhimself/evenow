@@ -91,6 +91,9 @@ angular.module('evenowapp', []).controller('evenowcontroller', ['$scope', functi
 .filter('humanizenumber', ['numberFilter', function(numberFilter) {
     return function(input) {
 
+        // convert to cents
+        input = input/100;
+
         // humanize very large numbers
         var units = '';
         var output = input;

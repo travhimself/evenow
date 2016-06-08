@@ -1,12 +1,12 @@
 <div>
     <h2 class="typename">{{ item.typename }}</h2>
     <h2 class="averageprice">
-        {{ item.avgprice / 100 | humanizenumber }}
+        {{ item.avgprice | humanizenumber }}
         <span class="change" ng-class="{'negative': item.avgchange < 0}">
             <svg viewbox="0 0 10 10">
                 <path class="bg" d="M0 10 L5 0 L10 10 L0 10" fill="#fff" stroke-width="8" stroke="none" />
             </svg>
-            {{ item.avgchange / 100 | humanizenumber }}
+            {{ item.avgchange | humanizenumber }}
         </span>
     </h2>
     <div class="canvaswrapper">
