@@ -107,7 +107,7 @@ var jsonsafeparse = function(json) {
     try {
         return JSON.parse(json);
     } catch(ex) {
-        return '';
+        return null;
     }
 }
 
@@ -131,8 +131,11 @@ var getserverstatus = function() {
 
         res.addListener('end', function() {
             var outputjson = jsonsafeparse(output);
-            worlddata.serverstatus = outputjson.serviceStatus.eve;
-            worlddata.playersonline = outputjson.userCounts.eve;
+
+            if ( outputjson ) {
+                worlddata.serverstatus = outputjson.serviceStatus.eve;
+                worlddata.playersonline = outputjson.userCounts.eve;
+            }
         });
 
     }).on('error', function(err) {
@@ -162,9 +165,12 @@ var getincursions = function() {
 
         res.addListener('end', function() {
             var outputjson = jsonsafeparse(output);
-            worlddata.incursionstate = outputjson.items[0].state;
-            worlddata.incursionconstellation = outputjson.items[0].constellation.name;
-            worlddata.incursionstaging = outputjson.items[0].stagingSolarSystem.name;
+
+            if ( outputjson ) {
+                worlddata.incursionstate = outputjson.items[0].state;
+                worlddata.incursionconstellation = outputjson.items[0].constellation.name;
+                worlddata.incursionstaging = outputjson.items[0].stagingSolarSystem.name;
+            }
         });
 
     }).on('error', function(err) {
@@ -204,31 +210,34 @@ var getmarketdata = function() {
             res.addListener('end', function() {
                 var outputjson = jsonsafeparse(output);
 
-                // set volume
-                item.volume = outputjson[0].sell.volume;
+                if ( outputjson ) {
 
-                // set average price as an integer
-                item.avgprice = outputjson[0].sell.fivePercent.toFixed(2);
-                item.avgprice = item.avgprice * 100;
+                    // set volume
+                    item.volume = outputjson[0].sell.volume;
 
-                // if we get a 0 from eve-central (which does happen sometimes), use previous value
-                if ( item.avgprice == 0 && item.avghistory.length > 0 ) {
-                    item.avgprice = item.avghistory[item.avghistory.length-1];
-                }
+                    // set average price as an integer
+                    item.avgprice = outputjson[0].sell.fivePercent.toFixed(2);
+                    item.avgprice = item.avgprice * 100;
 
-                // add new history entry to the end of the array if we're at a log interval
-                if ( currentcallcount % s.marketloginterval == 0 ) {
-                    item.avghistory.push(item.avgprice);
-                }
+                    // if we get a 0 from eve-central (which does happen sometimes), use previous value
+                    if ( item.avgprice == 0 && item.avghistory.length > 0 ) {
+                        item.avgprice = item.avghistory[item.avghistory.length-1];
+                    }
 
-                // calculate change over the last interval
-                if ( item.avghistory.length > 1 ) {
-                    item.avgchange = item.avghistory[item.avghistory.length-1] - item.avghistory[item.avghistory.length-2];
-                }
+                    // add new history entry to the end of the array if we're at a log interval
+                    if ( currentcallcount % s.marketloginterval == 0 ) {
+                        item.avghistory.push(item.avgprice);
+                    }
 
-                // trim data in excess of the max entries setting
-                if (item.avghistory.length > s.marketdatamaxentries) {
-                    item.avghistory.pop();
+                    // calculate change over the last interval
+                    if ( item.avghistory.length > 1 ) {
+                        item.avgchange = item.avghistory[item.avghistory.length-1] - item.avghistory[item.avghistory.length-2];
+                    }
+
+                    // trim data in excess of the max entries setting
+                    if (item.avghistory.length > s.marketdatamaxentries) {
+                        item.avghistory.pop();
+                    }
                 }
             });
 
