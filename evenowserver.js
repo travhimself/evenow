@@ -206,21 +206,24 @@ var getmarketdata = function() {
 
                 // set volume
                 item.volume = outputjson[0].sell.volume;
-                item.avgprice = outputjson[0].sell.fivePercent.toFixed(2)*100;
+
+                // set average price as an integer
+                item.avgprice = outputjson[0].sell.fivePercent.toFixed(2);
+                item.avgprice = item.avgprice * 100;
 
                 // if we get a 0 from eve-central (which does happen sometimes), use previous value
                 if ( item.avgprice == 0 && item.avghistory.length > 0 ) {
-                    item.avgprice = item.avghistory[0];
+                    item.avgprice = item.avghistory[item.avghistory.length-1];
                 }
 
-                // add new history entry to the front of the array if we're at a log interval
+                // add new history entry to the end of the array if we're at a log interval
                 if ( currentcallcount % s.marketloginterval == 0 ) {
-                    item.avghistory.unshift(item.avgprice);
+                    item.avghistory.push(item.avgprice);
                 }
 
                 // calculate change over the last interval
                 if ( item.avghistory.length > 1 ) {
-                    item.avgchange = item.avghistory[1] - item.avghistory[0];
+                    item.avgchange = item.avghistory[item.avghistory.length-1] - item.avghistory[item.avghistory.length-2];
                 }
 
                 // trim data in excess of the max entries setting
