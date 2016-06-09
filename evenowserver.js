@@ -133,8 +133,21 @@ var getserverstatus = function() {
             var outputjson = jsonsafeparse(output);
 
             if ( outputjson ) {
-                worlddata.serverstatus = outputjson.serviceStatus.eve;
-                worlddata.playersonline = outputjson.userCounts.eve;
+                if ( 'serviceStatus' in outputjson ) {
+                    worlddata.apistatusserver = true;
+                    worlddata.serverstatus = outputjson.serviceStatus.eve;
+                } else {
+                    worlddata.apistatusserver = false;
+                    worlddata.serverstatus = 'Offline';
+                }
+
+                if ( 'userCounts' in outputjson ) {
+                    worlddata.apistatusserver = true;
+                    worlddata.playersonline = outputjson.userCounts.eve;
+                } else {
+                    worlddata.apistatusserver = false;
+                    worlddata.playersonline = 0;
+                }
             }
         });
 
@@ -167,9 +180,14 @@ var getincursions = function() {
             var outputjson = jsonsafeparse(output);
 
             if ( outputjson ) {
-                worlddata.incursionstate = outputjson.items[0].state;
-                worlddata.incursionconstellation = outputjson.items[0].constellation.name;
-                worlddata.incursionstaging = outputjson.items[0].stagingSolarSystem.name;
+                if ( "items" in outputjson ) {
+                    worlddata.apistatusserver = true;
+                    worlddata.incursionstate = outputjson.items[0].state;
+                    worlddata.incursionconstellation = outputjson.items[0].constellation.name;
+                    worlddata.incursionstaging = outputjson.items[0].stagingSolarSystem.name;
+                } else {
+                    worlddata.apistatusserver = false;
+                }
             }
         });
 
@@ -211,32 +229,37 @@ var getmarketdata = function() {
                 var outputjson = jsonsafeparse(output);
 
                 if ( outputjson ) {
+                    if ( outputjson.length > 0 && "sell" in outputjson[0] ) {
+                        worlddata.apistatusmarket = true;
 
-                    // set volume
-                    item.volume = outputjson[0].sell.volume;
+                        // set volume
+                        item.volume = outputjson[0].sell.volume;
 
-                    // set average price as an integer
-                    item.avgprice = outputjson[0].sell.fivePercent.toFixed(2);
-                    item.avgprice = item.avgprice * 100;
+                        // set average price as an integer
+                        item.avgprice = outputjson[0].sell.fivePercent.toFixed(2);
+                        item.avgprice = item.avgprice * 100;
 
-                    // if we get a 0 from eve-central (which does happen sometimes), use previous value
-                    if ( item.avgprice == 0 && item.avghistory.length > 0 ) {
-                        item.avgprice = item.avghistory[item.avghistory.length-1];
-                    }
+                        // if we get a 0 from eve-central (which does happen sometimes), use previous value
+                        if ( item.avgprice == 0 && item.avghistory.length > 0 ) {
+                            item.avgprice = item.avghistory[item.avghistory.length-1];
+                        }
 
-                    // add new history entry to the end of the array if we're at a log interval
-                    if ( currentcallcount % s.marketloginterval == 0 ) {
-                        item.avghistory.push(item.avgprice);
-                    }
+                        // add new history entry to the end of the array if we're at a log interval
+                        if ( currentcallcount % s.marketloginterval == 0 ) {
+                            item.avghistory.push(item.avgprice);
+                        }
 
-                    // calculate change over the last interval
-                    if ( item.avghistory.length > 1 ) {
-                        item.avgchange = item.avghistory[item.avghistory.length-1] - item.avghistory[item.avghistory.length-2];
-                    }
+                        // calculate change over the last interval
+                        if ( item.avghistory.length > 1 ) {
+                            item.avgchange = item.avghistory[item.avghistory.length-1] - item.avghistory[item.avghistory.length-2];
+                        }
 
-                    // trim data in excess of the max entries setting
-                    if (item.avghistory.length > s.marketdatamaxentries) {
-                        item.avghistory.pop();
+                        // trim data in excess of the max entries setting
+                        if (item.avghistory.length > s.marketdatamaxentries) {
+                            item.avghistory.pop();
+                        }
+                    } else {
+                        worlddata.apistatusmarket = false;
                     }
                 }
             });
