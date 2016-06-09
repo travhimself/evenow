@@ -99,13 +99,13 @@ angular.module('evenowapp', []).controller('evenowcontroller', ['$scope', functi
         var output = input;
 
         // billions
-        if ( input >= 1000000000 ) {
+        if ( Math.abs(input) >= 1000000000 ) {
             units = 'B';
             output = input / 1000000000;
         }
 
         // millions
-        if ( input >= 1000000 ) {
+        if ( Math.abs(input) >= 1000000 ) {
             units = 'M';
             output = input / 1000000;
         }
