@@ -60,9 +60,9 @@ var server = evenowexpressapp.listen(s.nodeport, function() {
 });
 
 
-// send initial data on client connection (regardless of emit interval)
+// send initial data on client (and only that client) connection (regardless of emit interval)
 io.on('connection', function(socket) {
-    emitworlddata();
+    socket.emit('updateworlddata', worlddata);
 });
 
 
