@@ -125,15 +125,15 @@ var getserverstatus = function() {
             if ( outputjson ) {
                 if ( 'serviceStatus' in outputjson ) {
                     worlddata.apistatusserver = true;
-                    worlddata.serverstatus = outputjson.serviceStatus.eve;
+                    worlddata.serverstatus = outputjson.serviceStatus;
                 } else {
                     worlddata.apistatusserver = false;
                     worlddata.serverstatus = 'Offline';
                 }
 
-                if ( 'userCounts' in outputjson ) {
+                if ( 'userCount' in outputjson ) {
                     worlddata.apistatusserver = true;
-                    worlddata.playersonline = outputjson.userCounts.eve;
+                    worlddata.playersonline = outputjson.userCount;
                 } else {
                     worlddata.apistatusserver = false;
                     worlddata.playersonline = 0;
