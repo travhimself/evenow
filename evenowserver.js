@@ -226,8 +226,7 @@ var getmarketdata = function() {
                         item.volume = outputjson[0].sell.volume;
 
                         // set average price as an integer
-                        item.avgprice = outputjson[0].sell.fivePercent.toFixed(2);
-                        item.avgprice = item.avgprice * 100;
+                        item.avgprice = Math.round(outputjson[0].sell.fivePercent * 100);
 
                         // if we get a 0 from eve-central (which does happen sometimes), use previous value
                         if ( item.avgprice == 0 && item.avghistory.length > 0 ) {

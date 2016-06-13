@@ -98,16 +98,18 @@ angular.module('evenowapp', []).controller('evenowcontroller', ['$scope', functi
         var units = '';
         var output = input;
 
-        // billions
         if ( Math.abs(input) >= 1000000000 ) {
+            // billions
             units = 'B';
             output = input / 1000000000;
-        }
-
-        // millions
-        if ( Math.abs(input) >= 1000000 ) {
+        } else if ( Math.abs(input) >= 1000000 ) {
+            // millions
             units = 'M';
             output = input / 1000000;
+        } else if ( Math.abs(input) >= 10000 ) {
+            // thousands (if greater than tens of thousands)
+            units = 'K';
+            output = input / 1000;
         }
 
         output = numberFilter(output, 2)
