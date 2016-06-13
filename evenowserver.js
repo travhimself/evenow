@@ -6,7 +6,9 @@ var s = {
         root: __dirname + '/static/views/',
         dotfiles: 'ignore'
     },
+    datafile: 'static/data/data.json', // world data json file; starts with a placeholder object and gets filled over time
     sockettransmissioninteral: 60000, // interval between broadcast to clients (1min)
+    datawriteinterval: 3600000, // how often data is logged to data.json (1hour)
     crestcallinterval: 60000, // interval between data fetches (1min)
     evecentralcallinterval: 3600000, // interval between data fetches (1hour)
     marketsystem: 30000142, // jita
@@ -19,6 +21,7 @@ var s = {
 // include modules and start app
 var https = require('https');
 var moment = require('moment');
+var jsonfile = require('jsonfile');
 var express = require('express');
 var evenowexpressapp = express();
 var evenowserver = require('http').Server(evenowexpressapp);
@@ -41,22 +44,35 @@ evenowexpressapp.use(function(req, res) {
 
 
 // start server
+var worlddata;
+
 var server = evenowexpressapp.listen(s.nodeport, function() {
     var host = server.address().address;
     var port = server.address().port;
     console.log('Listening on port %s...', port);
 
-    getserverstatus();
-    setInterval(getserverstatus, s.crestcallinterval);
+    // load saved data
+    jsonfile.readFile(s.datafile, function(err, obj) {
+        if ( err == null ) {
+            worlddata = obj;
 
-    getincursions();
-    setInterval(getincursions, s.crestcallinterval);
+            // start running tasks
+            getserverstatus();
+            setInterval(getserverstatus, s.crestcallinterval);
 
-    getmarketdata();
-    setInterval(getmarketdata, s.evecentralcallinterval);
+            getincursions();
+            setInterval(getincursions, s.crestcallinterval);
 
-    emitworlddata();
-    setInterval(emitworlddata, s.sockettransmissioninteral);
+            getmarketdata();
+            setInterval(getmarketdata, s.evecentralcallinterval);
+
+            emitworlddata();
+            setInterval(emitworlddata, s.sockettransmissioninteral);
+
+            writeworlddata();
+            setInterval(writeworlddata, s.datawriteinterval);
+        }
+    });
 });
 
 
@@ -65,40 +81,14 @@ io.on('connection', function(socket) {
     socket.emit('updateworlddata', worlddata);
 });
 
-
-// world data object
-var worlddata = {
-    serverstatus: '',
-    playersonline: 0,
-    incursionstate: '',
-    incursionconstellation: '',
-    incursionstaging: '',
-    commodities: [
-        {'typeid': 34, 'typename': 'tritanium', 'volume': 0, 'avgchange': 0, 'avghistory': []},
-        {'typeid': 35, 'typename': 'pyerite', 'volume': 0, 'avgchange': 0, 'avghistory': []},
-        {'typeid': 36, 'typename': 'mexallon', 'volume': 0, 'avgchange': 0, 'avghistory': []},
-        {'typeid': 37, 'typename': 'isogen', 'volume': 0, 'avgchange': 0, 'avghistory': []},
-        {'typeid': 38, 'typename': 'nocxium', 'volume': 0, 'avgchange': 0, 'avghistory': []},
-        {'typeid': 39, 'typename': 'zydrine', 'volume': 0, 'avgchange': 0, 'avghistory': []},
-        {'typeid': 40, 'typename': 'megacyte', 'volume': 0, 'avgchange': 0, 'avghistory': []},
-        {'typeid': 16649, 'typename': 'technetium', 'volume': 0, 'avgchange': 0, 'avghistory': []}
-        // {'typeid': 16274, 'typename': 'helium iso', 'volume': 0, 'avgchange': 0, 'avghistory': []},
-        // {'typeid': 17887, 'typename': 'oxygen iso', 'volume': 0, 'avgchange': 0, 'avghistory': []},
-        // {'typeid': 17888, 'typename': 'nitrogen iso', 'volume': 0, 'avgchange': 0, 'avghistory': []},
-        // {'typeid': 17889, 'typename': 'hydrogen iso', 'volume': 0, 'avgchange': 0, 'avghistory': []}
-    ],
-    rmtitems: [
-        {'typeid': 29668, 'typename': 'plex', 'volume': 0, 'avgchange': 0, 'avghistory': []},
-        // {'typeid': 32792, 'typename': '100 aurum token', 'volume': 0, 'avgchange': 0, 'avghistory': []},
-        // {'typeid': 40519, 'typename': 'skill extractor', 'volume': 0, 'avgchange': 0, 'avghistory': []},
-        {'typeid': 40520, 'typename': 'skill injector', 'volume': 0, 'avgchange': 0, 'avghistory': []}
-    ],
-    apistatusserver: true,
-    apistatusmarket: true
-};
-
 var emitworlddata = function() {
     io.emit('updateworlddata', worlddata);
+};
+
+
+// data writing
+var writeworlddata = function() {
+    jsonfile.writeFile(s.datafile, worlddata);
 };
 
 

@@ -1,0 +1,93 @@
+{
+    "serverstatus": "",
+    "playersonline": 0,
+    "incursionstate": "",
+    "incursionconstellation": "",
+    "incursionstaging": "",
+    "commodities": [
+        {
+            "typeid": 34,
+            "typename": "tritanium",
+            "volume": 0,
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        },
+        {
+            "typeid": 35,
+            "typename": "pyerite",
+            "volume": 0,
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        },
+        {
+            "typeid": 36,
+            "typename": "mexallon",
+            "volume": 0,
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        },
+        {
+            "typeid": 37,
+            "typename": "isogen",
+            "volume": 0,
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        },
+        {
+            "typeid": 38,
+            "typename": "nocxium",
+            "volume": 0,
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        },
+        {
+            "typeid": 39,
+            "typename": "zydrine",
+            "volume": 0,
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        },
+        {
+            "typeid": 40,
+            "typename": "megacyte",
+            "volume": 0,
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        },
+        {
+            "typeid": 16649,
+            "typename": "technetium",
+            "volume": 0,
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        }
+    ],
+    "rmtitems": [
+        {
+            "typeid": 29668,
+            "typename": "plex",
+            "volume": 0,
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        },
+        {
+            "typeid": 40520,
+            "typename": "skill injector",
+            "volume": 0,
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        }
+    ],
+    "apistatusserver": true,
+    "apistatusmarket": true
+}

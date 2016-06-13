@@ -8,6 +8,7 @@
     "gulp": "^3.9.1",
     "gulp-less": "^3.1.0",
     "gulp-watch": "^4.3.6",
+    "jsonfile": "^2.3.1",
     "moment": "^2.13.0",
     "socket.io": "^1.4.6"
   },
