@@ -1,7 +1,7 @@
 /* Styles
 ================================================== */
 body {
-  background: #000 url(../img/bg-moon.png) right 0 no-repeat fixed;
+  background: #000 url(../img/bg-space-gray.jpg) right 0 no-repeat fixed;
   background-size: cover;
   color: #fff;
   font-family: 'Abel', Arial, serif;
@@ -56,10 +56,10 @@ body .worlditem.time .timer svg {
   display: block;
 }
 body .worlditem.time .timer .bg {
-  opacity: .2;
+  opacity: 0.2;
 }
 body .worlditem.time .timer .fg {
-  opacity: .8;
+  opacity: 0.8;
 }
 body .worlditem.time .timer.waiting .fg {
   stroke-dasharray: 250;
@@ -81,15 +81,15 @@ body .marketitem.rmt {
   height: 16em;
 }
 body .marketitem .typename {
-  margin-bottom: .3em;
+  margin-bottom: 0.3em;
 }
 body .marketitem .averageprice {
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
 }
 body .marketitem .averageprice .change {
   color: #27ae60;
   margin-left: 4px;
-  font-size: .8em;
+  font-size: 0.8em;
 }
 body .marketitem .averageprice .change svg {
   width: 8px;
@@ -102,7 +102,7 @@ body .marketitem .averageprice .change.negative svg {
   transform: rotate(180deg);
 }
 body .marketitem .label {
-  font-size: .8em;
+  font-size: 0.8em;
   text-transform: lowercase;
   letter-spacing: 1px;
 }

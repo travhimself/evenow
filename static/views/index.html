@@ -89,17 +89,15 @@
         </div>
 
         <div class="row">
-            <div class="col-lg-12">
-                <div class="block worlditem">
-                    <h2>Incursion currently {{ data.incursionstate }} in constellation {{ data.incursionconstellation }}... <br class="visible-sm"> Staging system is: {{ data.incursionstaging }}.</h2>
-                </div>
+            <div class="col-lg-12" ng-repeat="inc in data.incursions">
+                <div class="block worlditem" enincursionitem></div>
             </div>
         </div>
 
         <footer class="row">
             <div class="col-lg-6 col-sm-12 col-xs-12">
                 <div class="info">
-                    Powered by the <a href="#">CREST API</a> and <a href="#">EVE Central</a>. <br class="visible-xs">
+                    Powered by the <a href="https://esi.evetech.net">ESI API</a>. <br class="visible-xs">
                     Find us on <a href="https://github.com/travhimself/evenow">Github</a> and <a href="https://twitter.com/evenowdotcom">Twitter</a>.
                 </div>
             </div>

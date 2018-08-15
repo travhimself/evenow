@@ -1,6 +1,6 @@
 # [evenow.com](http://www.evenow.com)
 
-A real-time stats dashboard for Eve Online, pulling data from the [official CREST API](http://wiki.eveonline.com/en/wiki/EVE_API_Functions) and [eve-central.com](http://dev.eve-central.com/evec-api/start).
+A real-time stats dashboard for Eve Online, pulling data from the [official ESI API](https://esi.evetech.net).
 
 ![EVE NOW Screenshot](/static/img/screenshot.png?raw=true)
 

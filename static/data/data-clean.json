@@ -1,0 +1,81 @@
+{
+    "serverstatus": "",
+    "playersonline": 0,
+    "incursions": [],
+    "commodities": [
+        {
+            "typeid": 34,
+            "typename": "tritanium",
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        },
+        {
+            "typeid": 35,
+            "typename": "pyerite",
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        },
+        {
+            "typeid": 36,
+            "typename": "mexallon",
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        },
+        {
+            "typeid": 37,
+            "typename": "isogen",
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        },
+        {
+            "typeid": 38,
+            "typename": "nocxium",
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        },
+        {
+            "typeid": 39,
+            "typename": "zydrine",
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        },
+        {
+            "typeid": 40,
+            "typename": "megacyte",
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        },
+        {
+            "typeid": 16649,
+            "typename": "technetium",
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        }
+    ],
+    "rmtitems": [
+        {
+            "typeid": 44992,
+            "typename": "plex",
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        },
+        {
+            "typeid": 40520,
+            "typename": "skill injector",
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        }
+    ],
+    "apistatusserver": true,
+    "apistatusmarket": true
+}

@@ -35,7 +35,6 @@ angular.module('evenowapp', []).controller('evenowcontroller', ['$scope', functi
             $scope.$apply();
         }, 1000);
     });
-
 }])
 
 .directive('enmarketitem', function() {
@@ -54,7 +53,7 @@ angular.module('evenowapp', []).controller('evenowcontroller', ['$scope', functi
             });
 
             var canvaselem = element[0].querySelector('canvas');
-            var chart = new Chart(canvaselem, {
+            new Chart(canvaselem, {
                 type: 'bar',
                 data: {
                     labels: emptylabels,
@@ -83,7 +82,18 @@ angular.module('evenowapp', []).controller('evenowcontroller', ['$scope', functi
                     }
                 }
             });
+        }
+    };
+})
 
+.directive('enincursionitem', function() {
+    return {
+        restrict: 'A',
+        templateUrl: '/partials/incursionitem.html',
+        replace: true,
+        link: function(scope, element, attrs) {
+
+            // ...
         }
     };
 })
@@ -115,6 +125,5 @@ angular.module('evenowapp', []).controller('evenowcontroller', ['$scope', functi
         output = numberFilter(output, 2)
 
         return output + units;
-
     };
 }]);

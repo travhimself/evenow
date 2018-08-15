@@ -4,15 +4,16 @@
   "description": "A realtime stats dashboard for EVE Online",
   "main": "evenow.js",
   "dependencies": {
-    "express": "^4.13.4",
-    "gulp": "^3.9.1",
-    "gulp-less": "^3.1.0",
-    "gulp-watch": "^4.3.6",
-    "jsonfile": "^2.3.1",
-    "moment": "^2.13.0",
-    "socket.io": "^1.4.6"
+    "express": "^4.16.3",
+    "gulp": "^4.0.0",
+    "gulp-less": "^4.0.1",
+    "gulp-watch": "^4.3.11",
+    "jsonfile": "^2.4.0",
+    "socket.io": "^2.1.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "less": "^3.8.1"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

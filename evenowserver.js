@@ -7,20 +7,18 @@ var s = {
         dotfiles: 'ignore'
     },
     datafile: 'static/data/data.json', // world data json file; starts with a placeholder object and gets filled over time
+    esihost: 'esi.evetech.net', // esi api
     sockettransmissioninteral: 60000, // interval between broadcast to clients (1min)
-    datawriteinterval: 3600000, // how often data is logged to data.json (1hour)
-    crestcallinterval: 60000, // interval between data fetches (1min)
-    evecentralcallinterval: 3600000, // interval between data fetches (1hour)
-    marketsystem: 30000142, // jita
-    marketwindow: 24, // window for eve-central searches, in hours
-    marketloginterval: 4, // log the data every x calls for avghistory (4hours)
-    marketdatamaxentries: 18 // number of history entries to show for each market item (3days)
+    datawriteinterval: 3600000, // how often data is logged to data.json (1hour) (rec: 3600000)
+    apicallinterval_status: 60000, // interval between status data fetches (1min) (rec: 60000)
+    apicallinterval_incursions: 300000, // interval between incursion data fetches (5min) (rec: 300000)
+    apicallinterval_market: 3600000, // interval between market data fetches (1hour) (rec: 3600000)
+    marketdatamaxentries: 24 // number of history entries to show for each market item (dependent on apicallinterval_market)
 };
 
 
 // include modules and start app
 var https = require('https');
-var moment = require('moment');
 var jsonfile = require('jsonfile');
 var express = require('express');
 var evenowexpressapp = express();
@@ -47,7 +45,6 @@ evenowexpressapp.use(function(req, res) {
 var worlddata;
 
 var server = evenowexpressapp.listen(s.nodeport, function() {
-    var host = server.address().address;
     var port = server.address().port;
     console.log('Listening on port %s...', port);
 
@@ -58,13 +55,13 @@ var server = evenowexpressapp.listen(s.nodeport, function() {
 
             // start running tasks
             getserverstatus();
-            setInterval(getserverstatus, s.crestcallinterval);
-
-            getincursions();
-            setInterval(getincursions, s.crestcallinterval);
+            setInterval(getserverstatus, s.apicallinterval_status);
 
             getmarketdata();
-            setInterval(getmarketdata, s.evecentralcallinterval);
+            setInterval(getmarketdata, s.apicallinterval_incursions);
+
+            getincursions();
+            setInterval(getincursions, s.apicallinterval_market);
 
             emitworlddata();
             setInterval(emitworlddata, s.sockettransmissioninteral);
@@ -102,42 +99,30 @@ var jsonsafeparse = function(json) {
 }
 
 
-// api call: server status
+// CORE: players and server status
 var getserverstatus = function() {
 
-    var output = '';
     var options = {
-        host: 'crest-tq.eveonline.com',
-        path: '/'
+        host: s.esihost,
+        path: '/latest/status'
     };
 
     https.get(options, function(res) {
 
-        res.setEncoding('utf8');
+        var output = '';
 
+        res.setEncoding('utf8');
         res.on('data', function(chunk) {
             output += chunk;
         });
-
         res.addListener('end', function() {
             var outputjson = jsonsafeparse(output);
+            worlddata.playersonline = parseInt(outputjson.players);
 
-            if ( outputjson ) {
-                if ( 'serviceStatus' in outputjson ) {
-                    worlddata.apistatusserver = true;
-                    worlddata.serverstatus = outputjson.serviceStatus;
-                } else {
-                    worlddata.apistatusserver = false;
-                    worlddata.serverstatus = 'Offline';
-                }
-
-                if ( 'userCount' in outputjson ) {
-                    worlddata.apistatusserver = true;
-                    worlddata.playersonline = outputjson.userCount;
-                } else {
-                    worlddata.apistatusserver = false;
-                    worlddata.playersonline = 0;
-                }
+            if (worlddata.playersonline > 0) {
+                worlddata.serverstatus = 'Online';
+            } else {
+                worlddata.serverstatus = 'Offline';
             }
         });
 
@@ -145,118 +130,128 @@ var getserverstatus = function() {
         console.error(err);
         worlddata.apistatusserver = false;
     });
-
 };
 
 
-// api call: incursions
-var getincursions = function() {
-
-    var output = '';
-    var options = {
-        host: 'crest-tq.eveonline.com',
-        path: '/incursions/'
-    };
-
-    https.get(options, function(res) {
-
-        res.setEncoding('utf8');
-
-        res.on('data', function(chunk) {
-            output += chunk;
-        });
-
-        res.addListener('end', function() {
-            var outputjson = jsonsafeparse(output);
-
-            if ( outputjson ) {
-                if ( "items" in outputjson ) {
-                    worlddata.apistatusserver = true;
-                    worlddata.incursionstate = outputjson.items[0].state;
-                    worlddata.incursionconstellation = outputjson.items[0].constellation.name;
-                    worlddata.incursionstaging = outputjson.items[0].stagingSolarSystem.name;
-                } else {
-                    worlddata.apistatusserver = false;
-                }
-            }
-        });
-
-    }).on('error', function(err) {
-        console.error(err);
-        worlddata.apistatusserver = false;
-    });
-
-};
-
-
-// api call: market data
-var marketcallcounter = 0;
-var currentcallcount = 0;
+// CORE: market
 var getmarketdata = function() {
 
-    // snag current call count before we increment
-    currentcallcount = marketcallcounter;
+    var options = {
+        host: s.esihost,
+        path: '/latest/markets/prices'
+    };
 
-    // increment call marketcallcounter
-    marketcallcounter++;
+    https.get(options, function(res) {
 
-    worlddata.commodities.concat(worlddata.rmtitems).forEach( function(item, index) {
+        var output = '';
+
+        res.setEncoding('utf8');
+        res.on('data', function(chunk) {
+            output += chunk;
+        });
+        res.addListener('end', function() {
+            var outputjson = jsonsafeparse(output);
+
+            worlddata.commodities.concat(worlddata.rmtitems).forEach(function(el, i) {
+                let typeobj = outputjson.find(function(prop) {
+                    return prop.type_id === el.typeid;
+                });
+
+                // set average price as an integer (including hundreths places)
+                el.avgprice = Math.round(typeobj.average_price * 100);
+
+                // add new history entry to the end of the array if we're at a log interval
+                el.avghistory.push(el.avgprice);
+
+                // calculate change over the last interval
+                if ( el.avghistory.length > 1 ) {
+                    el.avgchange = el.avghistory[el.avghistory.length-1] - el.avghistory[el.avghistory.length-2];
+                }
+
+                // trim data in excess of the max entries setting
+                if (el.avghistory.length > s.marketdatamaxentries) {
+                    el.avghistory.pop();
+                }
+            });
+        });
+
+    }).on('error', function(err) {
+        console.error(err);
+        worlddata.apistatusserver = false;
+    });
+};
+
+
+// CORE: incursions
+var getincursions = function() {
+
+    var options = {
+        host: s.esihost,
+        path: '/latest/incursions'
+    };
+
+    https.get(options, function(res) {
+
+        var output = '';
+
+        res.setEncoding('utf8');
+        res.on('data', function(chunk) {
+            output += chunk;
+        });
+        res.addListener('end', function() {
+            var outputjson = jsonsafeparse(output);
+
+            worlddata.incursions = [];
+
+            outputjson.forEach(async function(el, i) {
+                let incursion = {
+                    'state': el.state,
+                    'constellation' : await getnamefromid('constellations', el.constellation_id),
+                    'staging': await getnamefromid('systems', el.staging_solar_system_id),
+                    'boss': el.has_boss
+                };
+
+                worlddata.incursions.push(incursion);
+            });
+        });
+
+    }).on('error', function(err) {
+        console.error(err);
+        worlddata.apistatusserver = false;
+    });
+};
+
+
+// UTIL: get name from ID
+var getnamefromid = function(type, id) {
+
+    // type is one of:
+    // "constellations"
+    // "systems"
+    // "types"
+
+    return new Promise(function(resolve, reject) {
+
         var output = '';
         var options = {
-            host: 'api.eve-central.com',
-            path: '/api/marketstat/json?hours=' + s.marketwindow + '&typeid=' + item.typeid + '&usesystem=' + s.marketsystem
+            host: s.esihost,
+            path: '/latest/universe/' + type + '/' + id
         };
 
         https.get(options, function(res) {
 
             res.setEncoding('utf8');
-
             res.on('data', function(chunk) {
                 output += chunk;
             });
-
             res.addListener('end', function() {
                 var outputjson = jsonsafeparse(output);
-
-                if ( outputjson ) {
-                    if ( outputjson.length > 0 && "sell" in outputjson[0] ) {
-                        worlddata.apistatusmarket = true;
-
-                        // set volume
-                        item.volume = outputjson[0].sell.volume;
-
-                        // set average price as an integer
-                        item.avgprice = Math.round(outputjson[0].sell.fivePercent * 100);
-
-                        // if we get a 0 from eve-central (which does happen sometimes), use previous value
-                        if ( item.avgprice == 0 && item.avghistory.length > 0 ) {
-                            item.avgprice = item.avghistory[item.avghistory.length-1];
-                        }
-
-                        // add new history entry to the end of the array if we're at a log interval
-                        if ( currentcallcount % s.marketloginterval == 0 ) {
-                            item.avghistory.push(item.avgprice);
-                        }
-
-                        // calculate change over the last interval
-                        if ( item.avghistory.length > 1 ) {
-                            item.avgchange = item.avghistory[item.avghistory.length-1] - item.avghistory[item.avghistory.length-2];
-                        }
-
-                        // trim data in excess of the max entries setting
-                        if (item.avghistory.length > s.marketdatamaxentries) {
-                            item.avghistory.pop();
-                        }
-                    } else {
-                        worlddata.apistatusmarket = false;
-                    }
-                }
+                resolve(outputjson.name);
             });
 
         }).on('error', function(err) {
-            console.error(err);
-            worlddata.apistatusmarket = false;
+            let errormsg = new Error('Error getting name from ID');
+            reject(errormsg);
         });
     });
-
 };
