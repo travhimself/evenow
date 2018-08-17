@@ -14,7 +14,9 @@ angular.module('evenowapp', []).controller('evenowcontroller', ['$scope', functi
     var time = moment.utc();
     var tickclock = function() {
         time.add(1, 's');
-        $scope.time = time.format('YYYY-DD-MM H:mm:ss a');
+        $scope.datetime = time.format('YYYY-DD-MM H:mm:ss');
+        $scope.date = time.format('YYYY-DD-MM');
+        $scope.time = time.format('H:mm:ss');
         $scope.$apply();
     };
     setInterval(tickclock, 1000);
@@ -54,19 +56,19 @@ angular.module('evenowapp', []).controller('evenowcontroller', ['$scope', functi
 
             var canvaselem = element[0].querySelector('canvas');
             new Chart(canvaselem, {
-                type: 'bar',
+                type: 'line',
                 data: {
                     labels: emptylabels,
                     datasets: [{
                         label: 'Price',
                         data: scope.item.avghistorycents,
                         borderWidth: 2,
-                        borderColor: 'transparent',
-                        backgroundColor: 'rgba(255, 255, 255, .95)'
+                        borderColor: 'white',
+                        backgroundColor: 'rgba(255, 255, 255, .1)', // rgba(52, 152, 219, .9)
+                        pointRadius: 0
                     }]
                 },
                 options: {
-                    // responsive: false,
                     maintainAspectRatio: false,
                     animation: false,
                     legend: {
@@ -90,6 +92,42 @@ angular.module('evenowapp', []).controller('evenowcontroller', ['$scope', functi
     return {
         restrict: 'A',
         templateUrl: '/partials/incursionitem.html',
+        replace: true,
+        link: function(scope, element, attrs) {
+
+            // ...
+        }
+    };
+})
+
+.directive('ensystemkillsitem', function() {
+    return {
+        restrict: 'A',
+        templateUrl: '/partials/systemkillsitem.html',
+        replace: true,
+        link: function(scope, element, attrs) {
+
+            // ...
+        }
+    };
+})
+
+.directive('ensystemjumpsitem', function() {
+    return {
+        restrict: 'A',
+        templateUrl: '/partials/systemjumpsitem.html',
+        replace: true,
+        link: function(scope, element, attrs) {
+
+            // ...
+        }
+    };
+})
+
+.directive('enfactionitem', function() {
+    return {
+        restrict: 'A',
+        templateUrl: '/partials/factionitem.html',
         replace: true,
         link: function(scope, element, attrs) {
 

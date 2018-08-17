@@ -7,12 +7,11 @@ A real-time stats dashboard for Eve Online, pulling data from the [official ESI 
 
 ## Built With
 
-* [node](https://github.com/joyent/node)
+* [node](https://github.com/joyent/node) + [express](https://expressjs.com/)
 * [socket io](http://socket.io/)
 * [angular](https://angularjs.org/)
 * [less](https://github.com/cloudhead/less.js)
 * [normalize](https://github.com/necolas/normalize.css)
-* [bootstrap](http://getbootstrap.com/)
 * [chartjs](http://www.chartjs.org/)
 * [moment](https://github.com/timrwood/moment/)
 

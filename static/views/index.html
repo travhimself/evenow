@@ -11,10 +11,9 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,700" rel="stylesheet">
 
     <link rel="stylesheet" href="/css/normalize.css">
-    <link rel="stylesheet" href="/css/bootstrap.css">
     <link rel="stylesheet" href="/css/styles.css">
 
     <script src="/js/moment.min.js" type="text/javascript"></script>
@@ -46,70 +45,64 @@
 
 <body ng-controller="evenowcontroller as enc">
 
-    <div class="container-fluid">
-
-        <div class="row">
-            <div class="col-lg-4 col-sm-6">
-                <div class="block worlditem">
-                    <h2>Tranquility {{ data.serverstatus }}</h2>
+    <div id="content">
+        <section id="status">
+            <div class="block worlditem">
+                <h1>Tranquility {{ data.serverstatus }}</h1>
+            </div>
+    
+            <div class="block worlditem">
+                <h1>{{ data.playersonline | number }} Players</h1>
+            </div>
+    
+            <div class="block worlditem time">
+                <h1>{{ date }}</h1>
+                <h1>{{ time }}</h1>
+                <div class="timer" ng-class="{'waiting': loaderwaiting}">
+                    <svg viewbox="0 0 100 100">
+                        <path class="bg" d="M50 90 A 1 1 0 1 1 50 10 A 1 1 0 1 1 50 90" fill="none" stroke-width="8" stroke="#fff" />
+                        <path class="fg" d="M50 90 A 1 1 0 1 1 50 10 A 1 1 0 1 1 50 90" fill="none" stroke-width="8" stroke="#fff" />
+                    </svg>
+                    <div class="helper">Time till next refresh</div>
                 </div>
             </div>
+        </section>
+    
+        <section id="market" style="display: none;">
+            <div class="block marketitem commodity" ng-repeat="item in data.commodities" enmarketitem></div>
+            <div class="block marketitem rmt" ng-repeat="item in data.rmtitems" enmarketitem></div>
+        </section>
 
-            <div class="col-lg-4 col-sm-6">
-                <div class="block worlditem">
-                    <h2>{{ data.playersonline }} Players</h2>
-                </div>
-            </div>
+        <section id="systemjumps">
+            <h2>Most Active Systems <span>(last 60m)</span></h2>
+            <div class="block systemjumpsitem" ng-repeat="system in data.systemjumps" ensystemjumpsitem></div>
+        </section>
 
-            <div class="col-lg-4 col-sm-12">
-                <div class="block worlditem time">
-                    <h2>{{ time }}</h2>
-                    <div class="timer" ng-class="{'waiting': loaderwaiting}">
-                        <svg viewbox="0 0 100 100">
-                            <path class="bg" d="M50 90 A 1 1 0 1 1 50 10 A 1 1 0 1 1 50 90" fill="none" stroke-width="8" stroke="#fff" />
-                            <path class="fg" d="M50 90 A 1 1 0 1 1 50 10 A 1 1 0 1 1 50 90" fill="none" stroke-width="8" stroke="#fff" />
-                        </svg>
-                    </div>
-                </div>
-            </div>
+        <section id="systemkills">
+            <h2>Most Lethal Systems <span>(last 60m)</span></h2>
+            <div class="block systemkillsitem" ng-repeat="system in data.systemkills" ensystemkillsitem></div>
+        </section>
+
+        <section id="incursions" style="display: none;">
+            <h2>Incursions <span>(live)</span></h2>
+            <div class="block incursionitem" ng-repeat="inc in data.incursions" enincursionitem></div>
+        </section>
+
+        <section id="factions">
+            <h2>Faction Warfare <span>(last 24h)</span></h2>
+            <div class="block factionitem {{ faction.shortname }}" ng-repeat="faction in data.factions" enfactionitem></div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="info">
+            Powered by the <a href="https://esi.evetech.net">ESI API</a>. Find us on <a href="https://github.com/travhimself/evenow">Github</a> and <a href="https://twitter.com/evenowdotcom">Twitter</a>.
         </div>
 
-        <div class="row">
-            <div class="flush col-lg-9 col-sm-12">
-                <div class="col-lg-3 col-sm-3" ng-repeat="item in data.commodities">
-                    <div class="block marketitem commodity" enmarketitem></div>
-                </div>
-            </div>
-
-            <div class="flush col-lg-3 col-sm-12">
-                <div class="col-lg-12 col-sm-12" ng-repeat="item in data.rmtitems">
-                    <div class="block marketitem rmt" enmarketitem></div>
-                </div>
-            </div>
+        <div class="apistatus" ng-if="!data.apistatusserver">
+            One or more APIs were inaccessible. Data may be inaccurate.
         </div>
-
-        <div class="row">
-            <div class="col-lg-12" ng-repeat="inc in data.incursions">
-                <div class="block worlditem" enincursionitem></div>
-            </div>
-        </div>
-
-        <footer class="row">
-            <div class="col-lg-6 col-sm-12 col-xs-12">
-                <div class="info">
-                    Powered by the <a href="https://esi.evetech.net">ESI API</a>. <br class="visible-xs">
-                    Find us on <a href="https://github.com/travhimself/evenow">Github</a> and <a href="https://twitter.com/evenowdotcom">Twitter</a>.
-                </div>
-            </div>
-
-            <div class="col-lg-6 hidden-xs">
-                <div class="apistatus" ng-if="!data.apistatusserver || !data.apistatusmarket">
-                    One or more APIs were inaccessible. Data may be inaccurate.
-                </div>
-            </div>
-        </footer>
-
-    </div><!-- end .container-fluid -->
+    </footer>
 
 </body>
 

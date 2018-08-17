@@ -1,67 +1,87 @@
 /* Styles
 ================================================== */
 body {
-  background: #000 url(../img/bg-space-gray.jpg) right 0 no-repeat fixed;
+  position: relative;
+  background: transparent url(../img/bg-space-gray.jpg) 0 0 repeat fixed;
   background-size: cover;
   color: #fff;
-  font-family: 'Abel', Arial, serif;
+  font-family: 'Rubik', Arial, serif;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
 }
-body ::selection {
-  background: rgba(0, 0, 0, 0.3);
+body:before {
+  position: absolute;
+  content: '';
+  z-index: -1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(rgba(30, 30, 30, 0.8), #1e1e1e);
+  background-attachment: fixed;
 }
-body .container-fluid {
-  margin: 2em 0;
+a {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: bold;
 }
-body .container-fluid .row .flush {
-  padding: 0;
+a:visited {
+  color: #34495e;
 }
-body .container-fluid .row [class^="col-"] {
-  margin-bottom: 2em;
+div#content {
+  display: flex;
 }
-body .container-fluid .row [class^="col-"] .block {
-  background: rgba(0, 0, 0, 0.6);
-  padding: 2em;
+div#content section {
+  padding: 50px;
 }
-body h1,
-body h2,
-body h3,
-body h4 {
+div#content section#status {
+  flex-basis: 30%;
+}
+div#content section#market {
+  flex-basis: 40%;
+}
+div#content section#incursions {
+  flex-basis: 30%;
+}
+div#content section h1,
+div#content section h2,
+div#content section h3 {
   text-transform: uppercase;
-  margin: 0;
 }
-body h1,
-body h2 {
-  letter-spacing: 2px;
+div#content section h1 {
+  font-size: 48px;
+  font-weight: 500;
 }
-body .worlditem {
-  position: relative;
+div#content section h2 {
+  font-size: 24px;
+  font-weight: 400;
 }
-body .worlditem h2 {
-  text-align: center;
+div#content section h2 span {
+  font-size: 12px;
 }
-body .worlditem.time h2 {
+div#content section h3 {
+  font-size: 18px;
+  font-weight: 400;
+}
+div#content section#status .time h2 {
   text-align: left;
 }
-body .worlditem.time .timer {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: 2em;
+div#content section#status .time .timer {
+  display: flex;
+  align-items: center;
+}
+div#content section#status .time .timer svg {
+  display: block;
   width: 32px;
   height: 32px;
 }
-body .worlditem.time .timer svg {
-  display: block;
-}
-body .worlditem.time .timer .bg {
+div#content section#status .time .timer .bg {
   opacity: 0.2;
 }
-body .worlditem.time .timer .fg {
+div#content section#status .time .timer .fg {
   opacity: 0.8;
 }
-body .worlditem.time .timer.waiting .fg {
+div#content section#status .time .timer.waiting .fg {
   stroke-dasharray: 250;
   stroke-dashoffset: 250;
   animation: timeranimation 60s linear normal infinite;
@@ -74,64 +94,141 @@ body .worlditem.time .timer.waiting .fg {
     stroke-dashoffset: 0;
   }
 }
-body .marketitem.commodity {
-  height: 16em;
+div#content section#status .time .timer .helper {
+  margin-left: 10px;
+  font-size: 12px;
+  font-style: italic;
+  opacity: 0;
+  transition: opacity 0.5s;
 }
-body .marketitem.rmt {
-  height: 16em;
+div#content section#status .time .timer svg:hover + .helper {
+  opacity: 0.3;
 }
-body .marketitem .typename {
-  margin-bottom: 0.3em;
+div#content section#market .marketitem {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 40px;
 }
-body .marketitem .averageprice {
-  margin-bottom: 0.5em;
+div#content section#market .marketitem .info .typename {
+  font-size: 24px;
+  text-transform: uppercase;
 }
-body .marketitem .averageprice .change {
-  color: #27ae60;
-  margin-left: 4px;
-  font-size: 0.8em;
+div#content section#market .marketitem .info .averageprice {
+  display: flex;
+  align-items: center;
 }
-body .marketitem .averageprice .change svg {
+div#content section#market .marketitem .info .averageprice .value {
+  margin-right: 20px;
+}
+div#content section#market .marketitem .info .averageprice .changeindicator {
   width: 8px;
   height: 8px;
+  margin-right: 5px;
 }
-body .marketitem .averageprice .change.negative {
+div#content section#market .marketitem .info .averageprice .changeindicator.negative {
+  fill: #27ae60;
+}
+div#content section#market .marketitem .info .averageprice .changeindicator.negative {
+  fill: #c0392b;
+}
+div#content section#market .marketitem .info .averageprice .changevalue {
+  font-size: 14px;
+}
+div#content section#market .marketitem .info .averageprice .changevalue.negative {
+  color: #27ae60;
+}
+div#content section#market .marketitem .info .averageprice .changevalue.negative {
   color: #c0392b;
 }
-body .marketitem .averageprice .change.negative svg {
-  transform: rotate(180deg);
+div#content section#market .marketitem .chartwrapper {
+  height: 100px;
 }
-body .marketitem .label {
-  font-size: 0.8em;
-  text-transform: lowercase;
-  letter-spacing: 1px;
+div#content section#incursions .incursionitem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 40px;
 }
-body .marketitem .canvaswrapper {
-  height: 6.5em;
-}
-body footer {
-  margin-bottom: 0;
-}
-body footer [class^="col-"] {
-  margin-bottom: 0 !important;
-}
-body footer [class^="col-"] div {
+div#content section#incursions .incursionitem .boss {
+  width: 32px;
   height: 32px;
-  line-height: 32px;
-  margin: 0 2em;
-  color: rgba(255, 255, 255, 0.4);
+  background: transparent url(../img/skull-a.svg) 0 0 no-repeat;
+  background-size: 32px 32px;
+  margin-right: 20px;
+  opacity: 0.1;
 }
-body footer .apistatus {
-  font-style: italic;
+div#content section#incursions .incursionitem .boss.true {
+  opacity: 1;
 }
-body footer .info a:link,
-body footer .info a:visited {
-  color: rgba(255, 255, 255, 0.6);
+div#content section#incursions .incursionitem .info span {
+  text-transform: capitalize;
 }
-body footer .info a:hover,
-body footer .info a:active {
-  color: rgba(255, 255, 255, 0.8);
-  text-decoration: underline;
+div#content section#incursions .incursionitem .info span.established {
+  color: #27ae60;
+}
+div#content section#incursions .incursionitem .info span.mobilizing {
+  color: #d35400;
+}
+div#content section#incursions .incursionitem .info span.withdrawing {
+  color: #c0392b;
+}
+div#content section#systemjumps .systemjumpsitem:nth-of-type(1) div[data-chart="bar"] .bar {
+  background-color: #27ae60;
+}
+div#content section#systemjumps .systemjumpsitem:nth-of-type(2) div[data-chart="bar"] .bar {
+  background-color: #2ecc71;
+}
+div#content section#systemjumps .systemjumpsitem:nth-of-type(3) div[data-chart="bar"] .bar {
+  background-color: #1abc9c;
+}
+div#content section#systemkills .systemkillsitem:nth-of-type(1) div[data-chart="bar"] .bar {
+  background-color: #c0392b;
+}
+div#content section#systemkills .systemkillsitem:nth-of-type(2) div[data-chart="bar"] .bar {
+  background-color: #d35400;
+}
+div#content section#systemkills .systemkillsitem:nth-of-type(3) div[data-chart="bar"] .bar {
+  background-color: #e67e22;
+}
+div#content section#factions .factionitem.caldari div[data-chart="bar"] .bar {
+  background-color: #34495e;
+}
+div#content section#factions .factionitem.minmatar div[data-chart="bar"] .bar {
+  background-color: #34495e;
+}
+div#content section#factions .factionitem.amarr div[data-chart="bar"] .bar {
+  background-color: #34495e;
+}
+div#content section#factions .factionitem.gallente div[data-chart="bar"] .bar {
+  background-color: #34495e;
+}
+div[data-chart="bar"] {
+  position: relative;
+  box-sizing: border-box;
+  height: 40px;
+  line-height: 40px;
+  margin-bottom: 10px;
+}
+div[data-chart="bar"] div {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+div[data-chart="bar"] div.text {
+  z-index: 2;
+  padding: 0 10px;
+}
+div[data-chart="bar"] div.text span {
+  font-size: 12px;
+  opacity: 0.5;
+}
+div[data-chart="bar"] div.bar {
+  z-index: 1;
+}
+footer {
+  padding: 50px;
 }
 /* Vars and Mixins
 ================================================== */

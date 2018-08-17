@@ -1,0 +1,11 @@
+<div>
+	<h3>{{ faction.name }}</h3>
+	<div data-chart="bar" class="systems">
+		<div class="text">{{ faction.systemscontrolled }} <span>systems controlled</span></div>
+		<div class="bar" style="width: {{ faction.systemscontrolled_percent }}%;"></div>
+	</div>
+	<div data-chart="bar" class="kills">
+		<div class="text">{{ faction.killsyesterday }} <span>kills</span></div>
+		<div class="bar" style="width: {{ faction.killsyesterday_percent }}%;"></div>
+	</div>
+</div>

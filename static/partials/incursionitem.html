@@ -1,3 +1,7 @@
 <div>
-	<h2>Incursion currently {{ inc.state }} in constellation {{ inc.constellation }}... <br class="visible-sm"> Staging system is: {{ inc.staging }}. Has boss {{ inc.boss }}</h2>
+	<div class="boss" ng-class="{'true': inc.boss}"></div>
+	<div class="info">
+		<div><span class="{{ inc.state }}">{{ inc.state }}</span> in {{ inc.constellation }}</div>
+		<div>Staging out of: <strong>{{ inc.staging }}</strong></div>
+	</div>
 </div>

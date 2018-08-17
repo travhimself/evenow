@@ -2,79 +2,107 @@
 ================================================== */
 
 body {
-    background: #000 url(../img/bg-space-gray.jpg) right 0 no-repeat fixed;
+    position: relative;
+    background: transparent url(../img/bg-space-gray.jpg) 0 0 repeat fixed;
     background-size: cover;
     color: @colorbody;
-    font-family: 'Abel', Arial, serif;
+    font-family: 'Rubik', Arial, serif;
     font-weight: 400;
     .thinfont;
 
-    ::selection {
-        background: rgba(0, 0, 0, .3);
+    &:before {
+        position: absolute;
+        content: '';
+        z-index: -1;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(rgba(30, 30, 30, 0.8), rgba(30, 30, 30, 1.0));
+        background-attachment: fixed;
     }
+}
 
-    .container-fluid {
-        margin: 2em 0;
+a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+}
 
-        .row {
+a:visited {
+    color: #34495e;
+}
 
-            .flush {
-                padding: 0;
-            }
+div#content {
+    display: flex;
 
-            [class^="col-"] {
-                margin-bottom: 2em;
-
-                .block {
-                    background: rgba(0, 0, 0, .6);
-                    padding: 2em;
-                }
-            }
+    section {
+        padding: 50px;
+    
+        &#status {
+            flex-basis: 30%;
         }
-    }
+    
+        &#market {
+            flex-basis: 40%;
+        }
+    
+        &#incursions {
+            flex-basis: 30%;
+        }
 
-    h1, h2, h3, h4 {
-        text-transform: uppercase;
-        margin: 0;
-    }
+        h1, h2, h3 {
+            text-transform: uppercase;
+        }
 
-    h1, h2 {
-        letter-spacing: 2px;
-    }
-
-    .worlditem {
-        position: relative;
+        h1 {
+            font-size: 48px;
+            font-weight: 500;
+        }
 
         h2 {
-            text-align: center;
+            font-size: 24px;
+            font-weight: 400;
+
+            span {
+                font-size: 12px;
+            }
         }
 
-        &.time {
+        h3 {
+            font-size: 18px;
+            font-weight: 400;
+        }
+    }
+    
+    section#status {
+        
+        .time {
 
             h2 {
                 text-align: left;
             }
-
+        
             .timer {
-                .valignmiddle;
-                right: 2em;
-                width: 32px;
-                height: 32px;
-
+                display: flex;
+                align-items: center;
+        
                 svg {
                     display: block;
+                    width: 32px;
+                    height: 32px;
                 }
-
+        
                 .bg {
                     opacity: .2;
                 }
-
+        
                 .fg {
                     opacity: .8;
                 }
-
+        
                 &.waiting {
-
+        
                     .fg {
                         // since we can't really know the length of the path without js, it must be obtained with:
                         // length = document.querySelector('.path').getTotalLength();
@@ -84,110 +112,230 @@ body {
                         animation: timeranimation 60s linear normal infinite;
                     }
                 }
-
+        
                 @keyframes timeranimation {
-
+        
                     from {
                         stroke-dashoffset: 250;
                     }
-
+        
                     to {
                         stroke-dashoffset: 0;
                     }
                 }
+        
+                .helper {
+                    margin-left: 10px;
+                    font-size: 12px;
+                    font-style: italic;
+                    opacity: 0;
+                    transition: opacity .5s;
+                }
+        
+                svg:hover + .helper {
+                    opacity: .3;
+                }
             }
         }
     }
+    
+    section#market {
+    
+        .marketitem {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 40px;
+    
+            .info {
+                // display: flex;
+                // justify-content: space-between;
 
-    .marketitem {
-
-        &.commodity {
-            height: 16em;
-        }
-
-        &.rmt {
-            height: 16em;
-        }
-
-        .typename {
-            margin-bottom: .3em;
-        }
-
-        .averageprice {
-            margin-bottom: .5em;
-
-            .change {
-                color: @colorpositive;
-                margin-left: 4px;
-                font-size: .8em;
-
-                svg {
-                    width: 8px;
-                    height: 8px;
+                .typename {
+                    font-size: 24px;
+                    text-transform: uppercase;
                 }
 
-                &.negative {
-                    color: @colornegative;
+                .averageprice {
+                    display: flex;
+                    align-items: center;
+    
+                    .value {
+                        margin-right: 20px;
+                    }
+    
+                    .changeindicator {
+                        width: 8px;
+                        height: 8px;
+                        margin-right: 5px;
+    
+                        &.negative {
+                            fill: @colorpositive;
+                        }
+                        
+                        &.negative {
+                            fill: @colornegative;
+                        }
+                    }
+    
+                    .changevalue {
+                        font-size: 14px;
+    
+                        &.negative {
+                            color: @colorpositive;
+                        }
+                        
+                        &.negative {
+                            color: @colornegative;
+                        }
+                    }
+                }
+            }
 
-                    svg {
-                        transform: rotate(180deg);
+            .chartwrapper {
+                height: 100px;
+            }
+        }
+    }
+    
+    section#incursions {
+    
+        .incursionitem {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+
+            .boss {
+                width: 32px;
+                height: 32px;
+                background: transparent url(../img/skull-a.svg) 0 0 no-repeat;
+                background-size: 32px 32px;
+                margin-right: 20px;
+                opacity: .1;
+
+                &.true {
+                    opacity: 1.0;
+                }
+            }
+
+            .info {
+
+                span {
+                    text-transform: capitalize;
+
+                    &.established {
+                        color: #27ae60;
+                    }
+    
+                    &.mobilizing {
+                        color: #d35400;
+                    }
+    
+                    &.withdrawing {
+                        color: #c0392b;
                     }
                 }
             }
         }
+    }
 
-        .label {
-            font-size: .8em;
-            text-transform: lowercase;
-            letter-spacing: 1px;
-        }
+    section#systemjumps {
 
-        .canvaswrapper {
-            height: 6.5em;
+        .systemjumpsitem {
 
-            canvas {
+            &:nth-of-type(1) div[data-chart="bar"] .bar {
+                background-color: #27ae60;
+            }
 
+            &:nth-of-type(2) div[data-chart="bar"] .bar {
+                background-color: #2ecc71;
+            }
+
+            &:nth-of-type(3) div[data-chart="bar"] .bar {
+                background-color: #1abc9c;
             }
         }
     }
 
-    footer {
-        margin-bottom: 0;
+    section#systemkills {
 
-        [class^="col-"] {
-            margin-bottom: 0 !important;
+        .systemkillsitem {
 
-            div {
-                height: 32px;
-                line-height: 32px;
-                margin: 0 2em;
-                color: fade(@colorbody, 40%);
+            &:nth-of-type(1) div[data-chart="bar"] .bar {
+                background-color: #c0392b;
             }
-        }
 
-        .apistatus {
-            font-style: italic;
-        }
+            &:nth-of-type(2) div[data-chart="bar"] .bar {
+                background-color: #d35400;
+            }
 
-        .info {
-
-            a {
-
-                &:link,
-                &:visited {
-                    color: fade(@colorbody, 60%);
-                }
-
-                &:hover,
-                &:active {
-                    color: fade(@colorbody, 80%);
-                    text-decoration: underline;
-                }
+            &:nth-of-type(3) div[data-chart="bar"] .bar {
+                background-color: #e67e22;
             }
         }
     }
 
+    section#factions {
+
+        .factionitem {
+
+            &.caldari div[data-chart="bar"] .bar {
+                background-color: #34495e;
+                // background-color: #3498db;
+            }
+
+            &.minmatar div[data-chart="bar"] .bar {
+                background-color: #34495e;
+                // background-color: #e67e22;
+            }
+
+            &.amarr div[data-chart="bar"] .bar {
+                background-color: #34495e;
+                // background-color: #f1c40f;
+            }
+
+            &.gallente div[data-chart="bar"] .bar {
+                background-color: #34495e;
+                // background-color: #16a085;
+            }
+        }
+    }
 }
+
+div[data-chart="bar"] {
+    position: relative;
+    box-sizing: border-box;
+    height: 40px;
+    line-height: 40px;
+    margin-bottom: 10px;
+
+    div {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+
+        &.text {
+            z-index: 2;
+            padding: 0 10px;
+        
+            span {
+                font-size: 12px;
+                opacity: .5;
+            }
+        }
+    
+        &.bar {
+            z-index: 1;
+        }
+    }
+}
+
+footer {
+    padding: 50px;
+}
+
 
 
 /* Vars and Mixins

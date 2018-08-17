@@ -1,15 +1,15 @@
 <div>
-    <h2 class="typename">{{ item.typename }}</h2>
-    <h2 class="averageprice">
-        {{ item.avgprice | humanizenumber }}
-        <span class="change" ng-class="{'negative': item.avgchange < 0}">
-            <svg viewbox="0 0 10 10">
+    <div class="info">
+        <div class="typename">{{ item.typename }}</div>
+        <div class="averageprice">
+            <div class="value">{{ item.avgprice | humanizenumber }}</div>
+            <svg class="changeindicator" viewbox="0 0 10 10" ng-class="{'negative': item.avgchange < 0}">
                 <path class="bg" d="M0 10 L5 0 L10 10 L0 10" fill="#fff" stroke-width="8" stroke="none" />
             </svg>
-            {{ item.avgchange | humanizenumber }}
-        </span>
-    </h2>
-    <div class="canvaswrapper">
+            <div class="changevalue" ng-class="{'negative': item.avgchange < 0}">{{ item.avgchange | humanizenumber }}</div>
+        </div>
+    </div>
+    <div class="chartwrapper">
         <canvas id="chart{{ item.typeid }}"></canvas>
     </div>
 </div>

@@ -8,11 +8,14 @@ var s = {
     },
     datafile: 'static/data/data.json', // world data json file; starts with a placeholder object and gets filled over time
     esihost: 'esi.evetech.net', // esi api
-    sockettransmissioninteral: 60000, // interval between broadcast to clients (1min)
-    datawriteinterval: 3600000, // how often data is logged to data.json (1hour) (rec: 3600000)
-    apicallinterval_status: 60000, // interval between status data fetches (1min) (rec: 60000)
-    apicallinterval_incursions: 300000, // interval between incursion data fetches (5min) (rec: 300000)
-    apicallinterval_market: 3600000, // interval between market data fetches (1hour) (rec: 3600000)
+    sockettransmissioninteral: 1200000, // interval between broadcast to clients (rec: 1200000) (2min)
+    datawriteinterval: 3600000, // how often data is logged to data.json (rec: 3600000) (1hour)
+    apicallinterval_status: 600000, // interval between status data fetches (rec: 600000) (10min)
+    apicallinterval_market: 3600000, // interval between market data fetches (rec: 3600000) (1hour)
+    apicallinterval_incursions: 600000, // interval between incursion data fetches (rec: 600000) (10min)
+    apicallinterval_systemkills: 3600000, // interval between market data fetches (rec: 3600000) (1hour)
+    apicallinterval_systemjumps: 3600000, // interval between market data fetches (rec: 3600000) (1hour)
+    apicallinterval_factionwarfare: 21600000, // interval between faction warfare data fetches (rec: 3600000) (6hours)
     marketdatamaxentries: 24 // number of history entries to show for each market item (dependent on apicallinterval_market)
 };
 
@@ -20,6 +23,7 @@ var s = {
 // include modules and start app
 var https = require('https');
 var jsonfile = require('jsonfile');
+var _ = require('underscore');
 var express = require('express');
 var evenowexpressapp = express();
 var evenowserver = require('http').Server(evenowexpressapp);
@@ -63,10 +67,20 @@ var server = evenowexpressapp.listen(s.nodeport, function() {
             getincursions();
             setInterval(getincursions, s.apicallinterval_market);
 
+            getsystemkills();
+            setInterval(getsystemkills, s.apicallinterval_systemkills);
+
+            getsystemjumps();
+            setInterval(getsystemjumps, s.apicallinterval_systemjumps);
+
+            getfactionwarfare();
+            setInterval(getfactionwarfare, s.apicallinterval_factionwarfare);
+
             emitworlddata();
             setInterval(emitworlddata, s.sockettransmissioninteral);
 
-            writeworlddata();
+            // NOTE: uncomment only if we want to do a write on initial server start; this should usually be commented out
+            // writeworlddata();
             setInterval(writeworlddata, s.datawriteinterval);
         }
     });
@@ -85,6 +99,8 @@ var emitworlddata = function() {
 
 // data writing
 var writeworlddata = function() {
+    let d = new Date();
+    console.log('Writing data at ' + d.toTimeString());
     jsonfile.writeFile(s.datafile, worlddata);
 };
 
@@ -96,7 +112,7 @@ var jsonsafeparse = function(json) {
     } catch(ex) {
         return null;
     }
-}
+};
 
 
 // CORE: players and server status
@@ -204,14 +220,142 @@ var getincursions = function() {
             worlddata.incursions = [];
 
             outputjson.forEach(async function(el, i) {
-                let incursion = {
+                worlddata.incursions.push({
                     'state': el.state,
                     'constellation' : await getnamefromid('constellations', el.constellation_id),
                     'staging': await getnamefromid('systems', el.staging_solar_system_id),
                     'boss': el.has_boss
-                };
+                });
+            });
+        });
 
-                worlddata.incursions.push(incursion);
+    }).on('error', function(err) {
+        console.error(err);
+        worlddata.apistatusserver = false;
+    });
+};
+
+
+// CORE: system kills
+var getsystemkills = function() {
+
+    var options = {
+        host: s.esihost,
+        path: '/latest/universe/system_kills'
+    };
+
+    https.get(options, function(res) {
+
+        var output = '';
+
+        res.setEncoding('utf8');
+        res.on('data', function(chunk) {
+            output += chunk;
+        });
+        res.addListener('end', function() {
+            var outputjson = jsonsafeparse(output);
+            var outputjsonsorted = _.sortBy(outputjson, "ship_kills");
+            var outputjsonsortedrev = outputjsonsorted.reverse();
+            var shortlist = outputjsonsortedrev.slice(0, 3);
+
+            worlddata.systemkills = [];
+
+            async function buildsystemkills() {
+                for (let system of shortlist) {
+                    worlddata.systemkills.push({
+                        'name': await getnamefromid('systems', system.system_id),
+                        'ships': system.ship_kills,
+                        'ships_percent': Math.round(system.ship_kills / shortlist[0].ship_kills * 100),
+                        'pods': system.pod_kills,
+                        'pods_percent': Math.round(system.pod_kills / shortlist[0].ship_kills * 100) // intentionally based on ships
+                    });
+                }
+            };
+
+            buildsystemkills();
+        });
+
+    }).on('error', function(err) {
+        console.error(err);
+        worlddata.apistatusserver = false;
+    });
+};
+
+
+// CORE: system jumps
+var getsystemjumps = function() {
+
+    var options = {
+        host: s.esihost,
+        path: '/latest/universe/system_jumps'
+    };
+
+    https.get(options, function(res) {
+
+        var output = '';
+
+        res.setEncoding('utf8');
+        res.on('data', function(chunk) {
+            output += chunk;
+        });
+        res.addListener('end', function() {
+            var outputjson = jsonsafeparse(output);
+            var outputjsonsorted = _.sortBy(outputjson, "ship_jumps");
+            var outputjsonsortedrev = outputjsonsorted.reverse();
+            var shortlist = outputjsonsortedrev  .slice(0, 3);
+
+            worlddata.systemjumps = [];
+
+            async function buildsystemjumps() {
+                for (let system of shortlist) {
+                    worlddata.systemjumps.push({
+                        'name': await getnamefromid('systems', system.system_id),
+                        'jumps': system.ship_jumps,
+                        'percent': Math.round(system.ship_jumps / shortlist[0].ship_jumps * 100)
+                    });
+                }
+            };
+
+            buildsystemjumps();
+        });
+
+    }).on('error', function(err) {
+        console.error(err);
+        worlddata.apistatusserver = false;
+    });
+};
+
+
+// CORE: faction warfare
+var getfactionwarfare = function() {
+
+    var options = {
+        host: s.esihost,
+        path: '/latest/fw/stats'
+    };
+
+    https.get(options, function(res) {
+
+        var output = '';
+
+        res.setEncoding('utf8');
+        res.on('data', function(chunk) {
+            output += chunk;
+        });
+        res.addListener('end', function() {
+            var outputjson = jsonsafeparse(output);
+            var outputjsonsorted = _.sortBy(outputjson, "systems_controlled");
+            var outputjsonsortedrev = outputjsonsorted.reverse();
+
+            worlddata.factions.forEach(function(el, i) {
+                let factionobj = outputjson.find(function(prop) {
+                    return prop.faction_id === el.id;
+                });
+
+                el.systemscontrolled = factionobj.systems_controlled;
+                el.systemscontrolled_percent = Math.round(factionobj.systems_controlled / outputjsonsortedrev[0].systems_controlled * 100);
+                el.killsyesterday = factionobj.kills.yesterday;
+                el.killsyesterday_percent = Math.round(factionobj.kills.yesterday / outputjsonsortedrev[0].kills.yesterday * 100);
             });
         });
 

@@ -2,6 +2,46 @@
     "serverstatus": "",
     "playersonline": 0,
     "incursions": [],
+    "systemkills": [],
+    "systemjumps": [],
+    "factions": [
+        {
+            "id": 500001,
+            "name": "caldari state",
+            "shortname": "caldari",
+            "systemscontrolled": 0,
+            "systemscontrolled_percent": 0,
+            "killsyesterday": 0,
+            "killsyesterday_percent": 0
+        },
+        {
+            "id": 500002,
+            "name": "minmatar republic",
+            "shortname": "minmatar",
+            "systemscontrolled": 0,
+            "systemscontrolled_percent": 0,
+            "killsyesterday": 0,
+            "killsyesterday_percent": 0
+        },
+        {
+            "id": 500003,
+            "name": "amarr empire",
+            "shortname": "amarr",
+            "systemscontrolled": 0,
+            "systemscontrolled_percent": 0,
+            "killsyesterday": 0,
+            "killsyesterday_percent": 0
+        },
+        {
+            "id": 500004,
+            "name": "gallente federation",
+            "shortname": "gallente",
+            "systemscontrolled": 0,
+            "systemscontrolled_percent": 0,
+            "killsyesterday": 0,
+            "killsyesterday_percent": 0
+        }
+    ],
     "commodities": [
         {
             "typeid": 34,
@@ -76,6 +116,5 @@
             "avghistory": []
         }
     ],
-    "apistatusserver": true,
-    "apistatusmarket": true
+    "apistatusserver": true
 }
