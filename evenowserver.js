@@ -11,7 +11,7 @@ var s = {
     sockettransmissioninteral: 1200000, // interval between broadcast to clients (rec: 1200000) (2min)
     datawriteinterval: 3600000, // how often data is logged to data.json (rec: 3600000) (1hour)
     apicallinterval_status: 600000, // interval between status data fetches (rec: 600000) (10min)
-    apicallinterval_market: 3600000, // interval between market data fetches (rec: 3600000) (1hour)
+    apicallinterval_market: 14400000, // interval between market data fetches (rec: 14400000) (4hours)
     apicallinterval_incursions: 600000, // interval between incursion data fetches (rec: 600000) (10min)
     apicallinterval_systemkills: 3600000, // interval between market data fetches (rec: 3600000) (1hour)
     apicallinterval_systemjumps: 3600000, // interval between market data fetches (rec: 3600000) (1hour)
@@ -132,13 +132,19 @@ var getserverstatus = function() {
             output += chunk;
         });
         res.addListener('end', function() {
-            var outputjson = jsonsafeparse(output);
-            worlddata.playersonline = parseInt(outputjson.players);
+            
+            try {
+                var outputjson = jsonsafeparse(output);
 
-            if (worlddata.playersonline > 0) {
-                worlddata.serverstatus = 'Online';
-            } else {
-                worlddata.serverstatus = 'Offline';
+                worlddata.playersonline = parseInt(outputjson.players);
+
+                if (worlddata.playersonline > 0) {
+                    worlddata.serverstatus = 'Online';
+                } else {
+                    worlddata.serverstatus = 'Offline';
+                }
+            } catch(e) {
+                console.log(e);
             }
         });
 
@@ -166,29 +172,34 @@ var getmarketdata = function() {
             output += chunk;
         });
         res.addListener('end', function() {
-            var outputjson = jsonsafeparse(output);
+            
+            try {
+                var outputjson = jsonsafeparse(output);
 
-            worlddata.commodities.concat(worlddata.rmtitems).forEach(function(el, i) {
-                let typeobj = outputjson.find(function(prop) {
-                    return prop.type_id === el.typeid;
+                worlddata.commodities.concat(worlddata.rmtitems).forEach(function(el, i) {
+                    let typeobj = outputjson.find(function(prop) {
+                        return prop.type_id === el.typeid;
+                    });
+
+                    // set average price as an integer (including hundreths places)
+                    el.avgprice = Math.round(typeobj.average_price * 100);
+
+                    // add new history entry to the end of the array if we're at a log interval
+                    el.avghistory.push(el.avgprice);
+
+                    // calculate change over the last interval
+                    if ( el.avghistory.length > 1 ) {
+                        el.avgchange = el.avghistory[el.avghistory.length-1] - el.avghistory[el.avghistory.length-2];
+                    }
+
+                    // trim data in excess of the max entries setting
+                    if (el.avghistory.length > s.marketdatamaxentries) {
+                        el.avghistory.pop();
+                    }
                 });
-
-                // set average price as an integer (including hundreths places)
-                el.avgprice = Math.round(typeobj.average_price * 100);
-
-                // add new history entry to the end of the array if we're at a log interval
-                el.avghistory.push(el.avgprice);
-
-                // calculate change over the last interval
-                if ( el.avghistory.length > 1 ) {
-                    el.avgchange = el.avghistory[el.avghistory.length-1] - el.avghistory[el.avghistory.length-2];
-                }
-
-                // trim data in excess of the max entries setting
-                if (el.avghistory.length > s.marketdatamaxentries) {
-                    el.avghistory.pop();
-                }
-            });
+            } catch(e) {
+                console.log(e);
+            }
         });
 
     }).on('error', function(err) {
@@ -215,18 +226,23 @@ var getincursions = function() {
             output += chunk;
         });
         res.addListener('end', function() {
-            var outputjson = jsonsafeparse(output);
+            
+            try {
+                var outputjson = jsonsafeparse(output);
 
-            worlddata.incursions = [];
+                worlddata.incursions = [];
 
-            outputjson.forEach(async function(el, i) {
-                worlddata.incursions.push({
-                    'state': el.state,
-                    'constellation' : await getnamefromid('constellations', el.constellation_id),
-                    'staging': await getnamefromid('systems', el.staging_solar_system_id),
-                    'boss': el.has_boss
+                outputjson.forEach(async function(el, i) {
+                    worlddata.incursions.push({
+                        'state': el.state,
+                        'constellation' : await getnamefromid('constellations', el.constellation_id),
+                        'staging': await getnamefromid('systems', el.staging_solar_system_id),
+                        'boss': el.has_boss
+                    });
                 });
-            });
+            } catch(e) {
+                console.log(e);
+            }
         });
 
     }).on('error', function(err) {
@@ -253,26 +269,31 @@ var getsystemkills = function() {
             output += chunk;
         });
         res.addListener('end', function() {
-            var outputjson = jsonsafeparse(output);
-            var outputjsonsorted = _.sortBy(outputjson, "ship_kills");
-            var outputjsonsortedrev = outputjsonsorted.reverse();
-            var shortlist = outputjsonsortedrev.slice(0, 3);
+            
+            try {
+                var outputjson = jsonsafeparse(output);
+                var outputjsonsorted = _.sortBy(outputjson, "ship_kills");
+                var outputjsonsortedrev = outputjsonsorted.reverse();
+                var shortlist = outputjsonsortedrev.slice(0, 3);
 
-            worlddata.systemkills = [];
+                worlddata.systemkills = [];
 
-            async function buildsystemkills() {
-                for (let system of shortlist) {
-                    worlddata.systemkills.push({
-                        'name': await getnamefromid('systems', system.system_id),
-                        'ships': system.ship_kills,
-                        'ships_percent': Math.round(system.ship_kills / shortlist[0].ship_kills * 100),
-                        'pods': system.pod_kills,
-                        'pods_percent': Math.round(system.pod_kills / shortlist[0].ship_kills * 100) // intentionally based on ships
-                    });
-                }
-            };
+                async function buildsystemkills() {
+                    for (let system of shortlist) {
+                        worlddata.systemkills.push({
+                            'name': await getnamefromid('systems', system.system_id),
+                            'ships': system.ship_kills,
+                            'ships_percent': Math.round(system.ship_kills / shortlist[0].ship_kills * 100),
+                            'pods': system.pod_kills,
+                            'pods_percent': Math.round(system.pod_kills / shortlist[0].ship_kills * 100) // intentionally based on ships
+                        });
+                    }
+                };
 
-            buildsystemkills();
+                buildsystemkills();
+            } catch(e) {
+                console.log(e);
+            }
         });
 
     }).on('error', function(err) {
@@ -299,24 +320,29 @@ var getsystemjumps = function() {
             output += chunk;
         });
         res.addListener('end', function() {
-            var outputjson = jsonsafeparse(output);
-            var outputjsonsorted = _.sortBy(outputjson, "ship_jumps");
-            var outputjsonsortedrev = outputjsonsorted.reverse();
-            var shortlist = outputjsonsortedrev  .slice(0, 3);
+            
+            try {
+                var outputjson = jsonsafeparse(output);
+                var outputjsonsorted = _.sortBy(outputjson, "ship_jumps");
+                var outputjsonsortedrev = outputjsonsorted.reverse();
+                var shortlist = outputjsonsortedrev  .slice(0, 3);
 
-            worlddata.systemjumps = [];
+                worlddata.systemjumps = [];
 
-            async function buildsystemjumps() {
-                for (let system of shortlist) {
-                    worlddata.systemjumps.push({
-                        'name': await getnamefromid('systems', system.system_id),
-                        'jumps': system.ship_jumps,
-                        'percent': Math.round(system.ship_jumps / shortlist[0].ship_jumps * 100)
-                    });
-                }
-            };
+                async function buildsystemjumps() {
+                    for (let system of shortlist) {
+                        worlddata.systemjumps.push({
+                            'name': await getnamefromid('systems', system.system_id),
+                            'jumps': system.ship_jumps,
+                            'percent': Math.round(system.ship_jumps / shortlist[0].ship_jumps * 100)
+                        });
+                    }
+                };
 
-            buildsystemjumps();
+                buildsystemjumps();
+            } catch(e) {
+                console.log(e);
+            }
         });
 
     }).on('error', function(err) {
@@ -343,20 +369,25 @@ var getfactionwarfare = function() {
             output += chunk;
         });
         res.addListener('end', function() {
-            var outputjson = jsonsafeparse(output);
-            var outputjsonsorted = _.sortBy(outputjson, "systems_controlled");
-            var outputjsonsortedrev = outputjsonsorted.reverse();
+            
+            try {
+                var outputjson = jsonsafeparse(output);
+                var outputjsonsorted = _.sortBy(outputjson, "systems_controlled");
+                var outputjsonsortedrev = outputjsonsorted.reverse();
 
-            worlddata.factions.forEach(function(el, i) {
-                let factionobj = outputjson.find(function(prop) {
-                    return prop.faction_id === el.id;
+                worlddata.factions.forEach(function(el, i) {
+                    let factionobj = outputjson.find(function(prop) {
+                        return prop.faction_id === el.id;
+                    });
+
+                    el.systemscontrolled = factionobj.systems_controlled;
+                    el.systemscontrolled_percent = Math.round(factionobj.systems_controlled / outputjsonsortedrev[0].systems_controlled * 100);
+                    el.killsyesterday = factionobj.kills.yesterday;
+                    el.killsyesterday_percent = Math.round(factionobj.kills.yesterday / outputjsonsortedrev[0].kills.yesterday * 100);
                 });
-
-                el.systemscontrolled = factionobj.systems_controlled;
-                el.systemscontrolled_percent = Math.round(factionobj.systems_controlled / outputjsonsortedrev[0].systems_controlled * 100);
-                el.killsyesterday = factionobj.kills.yesterday;
-                el.killsyesterday_percent = Math.round(factionobj.kills.yesterday / outputjsonsortedrev[0].kills.yesterday * 100);
-            });
+            } catch(e) {
+                console.log(e);
+            }
         });
 
     }).on('error', function(err) {
@@ -389,8 +420,13 @@ var getnamefromid = function(type, id) {
                 output += chunk;
             });
             res.addListener('end', function() {
-                var outputjson = jsonsafeparse(output);
-                resolve(outputjson.name);
+                
+                try {
+                    var outputjson = jsonsafeparse(output);
+                    resolve(outputjson.name);
+                } catch(e) {
+                    console.log(e);
+                }
             });
 
         }).on('error', function(err) {

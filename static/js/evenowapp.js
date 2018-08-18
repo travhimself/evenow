@@ -4,11 +4,6 @@ angular.module('evenowapp', []).controller('evenowcontroller', ['$scope', functi
     var encontrol = this;
 
 
-    // cache selectors
-    encontrol.$body = angular.element(document).find('body');
-    encontrol.$charts = angular.element(document).find('canvas');
-
-
     // start clock
     $scope.time = '...';
     var time = moment.utc();
@@ -36,6 +31,23 @@ angular.module('evenowapp', []).controller('evenowcontroller', ['$scope', functi
             $scope.loaderwaiting = true;
             $scope.$apply();
         }, 1000);
+    });
+
+
+    // settings
+    $scope.settings = {};
+    $scope.settings.visible = false;
+    $scope.settings.viewmode = 'blend';
+
+    $scope.togglesettings = function() {
+        $scope.settings.visible = !$scope.settings.visible;
+        // ...
+    };
+
+    $scope.$watch('settings.viewmode', function(ov, nv) {
+        if (nv !== ov) {
+            setTimeout($scope.togglesettings, 200);
+        }
     });
 }])
 
@@ -69,6 +81,7 @@ angular.module('evenowapp', []).controller('evenowcontroller', ['$scope', functi
                     }]
                 },
                 options: {
+                    responsive: true,
                     maintainAspectRatio: false,
                     animation: false,
                     legend: {
@@ -132,6 +145,19 @@ angular.module('evenowapp', []).controller('evenowcontroller', ['$scope', functi
         link: function(scope, element, attrs) {
 
             // ...
+        }
+    };
+})
+
+.directive('chartbar', function() {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+
+            setTimeout(function() {
+                element[0].style.opacity = '1.0';
+                element[0].querySelector('.bar').style.width = attrs.widthVal + '%';
+            }, 200);
         }
     };
 })

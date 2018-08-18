@@ -1,7 +1,7 @@
 <div>
 	<h3>{{ system.name }}</h3>
-	<div data-chart="bar">
+	<div chartbar data-width-val="{{ system.percent }}">
 		<div class="text">{{ system.jumps }} <span>jumps</span></div>
-		<div class="bar" style="width: {{ system.percent }}%;"></div>
+		<div class="bar"></div>
 	</div>
 </div>

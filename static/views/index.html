@@ -43,21 +43,26 @@
 
 </head>
 
-<body ng-controller="evenowcontroller as enc">
+<body ng-controller="evenowcontroller as enc" class="viewmode-{{ settings.viewmode }}">
 
     <div id="content">
         <section id="status">
             <div class="block worlditem">
-                <h1>Tranquility {{ data.serverstatus }}</h1>
+                <div class="header-label">Tranquility Server</div>
+                <h1>{{ data.serverstatus }}</h1>
             </div>
     
             <div class="block worlditem">
-                <h1>{{ data.playersonline | number }} Players</h1>
+                <div class="header-label">Players</div>
+                <h1>{{ data.playersonline | number }}</h1>
             </div>
     
             <div class="block worlditem time">
-                <h1>{{ date }}</h1>
-                <h1>{{ time }}</h1>
+                <div class="header-label">In-Game Time</div>
+                <h1>
+                    {{ date }}<br>
+                    {{ time }}
+                </h1>
                 <div class="timer" ng-class="{'waiting': loaderwaiting}">
                     <svg viewbox="0 0 100 100">
                         <path class="bg" d="M50 90 A 1 1 0 1 1 50 10 A 1 1 0 1 1 50 90" fill="none" stroke-width="8" stroke="#fff" />
@@ -66,31 +71,52 @@
                     <div class="helper">Time till next refresh</div>
                 </div>
             </div>
-        </section>
-    
-        <section id="market" style="display: none;">
-            <div class="block marketitem commodity" ng-repeat="item in data.commodities" enmarketitem></div>
-            <div class="block marketitem rmt" ng-repeat="item in data.rmtitems" enmarketitem></div>
+
+            <div class="settings">
+                <div class="icon" ng-class="{'active': settings.visible}" ng-click="togglesettings()">
+                    <svg class="octicon octicon-gear" viewBox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M14 8.77v-1.6l-1.94-.64-.45-1.09.88-1.84-1.13-1.13-1.81.91-1.09-.45-.69-1.92h-1.6l-.63 1.94-1.11.45-1.84-.88-1.13 1.13.91 1.81-.45 1.09L0 7.23v1.59l1.94.64.45 1.09-.88 1.84 1.13 1.13 1.81-.91 1.09.45.69 1.92h1.59l.63-1.94 1.11-.45 1.84.88 1.13-1.13-.92-1.81.47-1.09L14 8.75v.02zM7 11c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"></path></svg>
+                </div>
+                <form ng-class="{'visible': settings.visible}">
+                    <fieldset>
+                        <legend><div class="header-label">View Mode</div></legend>
+
+                        <input type="radio" id="blend" value="blend" name="viewmode" ng-model="settings.viewmode">
+                        <label for="blend"><b><b></b></b>Blend</label>
+
+                        <input type="radio" id="market" value="market" name="viewmode" ng-model="settings.viewmode">
+                        <label for="market"><b><b></b></b>Market</label>
+
+                        <input type="radio" id="world" value="world" name="viewmode" ng-model="settings.viewmode">
+                        <label for="world"><b><b></b></b>World</label>
+                    </fieldset>
+                </form>
+            </div>
         </section>
 
-        <section id="systemjumps">
+        <section id="systemjumps" ng-show="settings.viewmode === 'blend' || settings.viewmode === 'world'">
             <h2>Most Active Systems <span>(last 60m)</span></h2>
             <div class="block systemjumpsitem" ng-repeat="system in data.systemjumps" ensystemjumpsitem></div>
         </section>
 
-        <section id="systemkills">
+        <section id="systemkills" ng-show="settings.viewmode === 'blend' || settings.viewmode === 'world'">
             <h2>Most Lethal Systems <span>(last 60m)</span></h2>
             <div class="block systemkillsitem" ng-repeat="system in data.systemkills" ensystemkillsitem></div>
         </section>
 
-        <section id="incursions" style="display: none;">
+        <section id="incursions" ng-show="settings.viewmode === 'world'">
             <h2>Incursions <span>(live)</span></h2>
             <div class="block incursionitem" ng-repeat="inc in data.incursions" enincursionitem></div>
         </section>
 
-        <section id="factions">
+        <section id="factions" ng-show="settings.viewmode === 'world'">
             <h2>Faction Warfare <span>(last 24h)</span></h2>
             <div class="block factionitem {{ faction.shortname }}" ng-repeat="faction in data.factions" enfactionitem></div>
+        </section>
+
+        <section id="market" ng-show="settings.viewmode === 'blend' || settings.viewmode === 'market'">
+            <h2>Market Prices <span>(last 96h)</span></h2>
+            <div class="block marketitem commodity" ng-repeat="item in data.commodities" enmarketitem></div>
+            <div class="block marketitem rmt" ng-repeat="item in data.rmtitems" enmarketitem></div>
         </section>
     </div>
 

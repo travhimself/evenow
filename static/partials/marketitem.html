@@ -1,15 +1,20 @@
-<div>
-    <div class="info">
-        <div class="typename">{{ item.typename }}</div>
-        <div class="averageprice">
-            <div class="value">{{ item.avgprice | humanizenumber }}</div>
-            <svg class="changeindicator" viewbox="0 0 10 10" ng-class="{'negative': item.avgchange < 0}">
-                <path class="bg" d="M0 10 L5 0 L10 10 L0 10" fill="#fff" stroke-width="8" stroke="none" />
-            </svg>
-            <div class="changevalue" ng-class="{'negative': item.avgchange < 0}">{{ item.avgchange | humanizenumber }}</div>
+<div ng-show="
+    settings.viewmode === 'market' ||
+    (settings.viewmode === 'blend' &&
+    (item.typename === 'tritanium' || item.typename === 'technetium' || item.typename === 'plex' || item.typename === 'skill injector'))">
+    <div class="market-item-inner">
+        <div class="info">
+            <h3 class="typename">{{ item.typename }}</h3>
+            <div class="averageprice">
+                <div class="value">{{ item.avgprice | humanizenumber }}</div>
+                <svg class="changeindicator" viewbox="0 0 10 10" ng-class="{'negative': item.avgchange < 0}">
+                    <path class="bg" d="M0 10 L5 0 L10 10 L0 10" fill="#fff" stroke-width="8" stroke="none" />
+                </svg>
+                <div class="changevalue" ng-class="{'negative': item.avgchange < 0}">{{ item.avgchange | humanizenumber }}</div>
+            </div>
         </div>
-    </div>
-    <div class="chartwrapper">
-        <canvas id="chart{{ item.typeid }}"></canvas>
+        <div class="chartwrapper">
+            <canvas id="chart{{ item.typeid }}"></canvas>
+        </div>
     </div>
 </div>

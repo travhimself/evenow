@@ -9,6 +9,7 @@
     "gulp-cli": "github:gulpjs/gulp-cli",
     "gulp-less": "^4.0.1",
     "jsonfile": "^2.4.0",
+    "npm": "^6.4.0",
     "socket.io": "^2.1.1",
     "underscore": "^1.9.1"
   },

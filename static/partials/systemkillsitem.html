@@ -1,11 +1,11 @@
 <div>
 	<h3>{{ system.name }}</h3>
-	<div data-chart="bar" class="ships">
+	<div chartbar data-width-val="{{ system.ships_percent }}" class="ships">
 		<div class="text">{{ system.ships }} <span>ship kills</span></div>
-		<div class="bar" style="width: {{ system.ships_percent }}%;"></div>
+		<div class="bar"></div>
 	</div>
-	<div data-chart="bar" class="pods">
+	<div chartbar data-width-val="{{ system.pods_percent }}" class="pods">
 		<div class="text">{{ system.pods }} <span>pod kills</span></div>
-		<div class="bar" style="width: {{ system.pods_percent }}%;"></div>
+		<div class="bar"></div>
 	</div>
 </div>
