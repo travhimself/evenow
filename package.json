@@ -1,8 +1,8 @@
 {
   "name": "evenow",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "description": "A realtime stats dashboard for EVE Online",
-  "main": "evenow.js",
+  "main": "evenowserver.js",
   "dependencies": {
     "express": "^4.16.3",
     "gulp": "^3.9.1",
