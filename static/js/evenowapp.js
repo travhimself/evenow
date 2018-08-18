@@ -76,8 +76,10 @@ angular.module('evenowapp', []).controller('evenowcontroller', ['$scope', functi
                         data: scope.item.avghistorycents,
                         borderWidth: 2,
                         borderColor: 'white',
-                        backgroundColor: 'rgba(255, 255, 255, .1)', // rgba(52, 152, 219, .9)
-                        pointRadius: 0
+                        backgroundColor: 'rgba(255, 255, 255, .1)',
+                        pointBackgroundColor: 'white',
+                        pointRadius: 3,
+                        lineTension: 0
                     }]
                 },
                 options: {
@@ -86,6 +88,14 @@ angular.module('evenowapp', []).controller('evenowcontroller', ['$scope', functi
                     animation: false,
                     legend: {
                         display: false
+                    },
+                    layout: {
+                        padding: {
+                            left: 10,
+                            right: 10,
+                            top: 10,
+                            bottom: 10
+                        }
                     },
                     scales: {
                         xAxes: [{

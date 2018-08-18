@@ -1,1 +1,120 @@
-{"serverstatus":"Online","playersonline":20668,"incursions":[{"state":"established","constellation":"RHG-4O","staging":"NLO-3Z","boss":false},{"state":"mobilizing","constellation":"Kakol","staging":"Neburab","boss":true},{"state":"withdrawing","constellation":"SLYP-5","staging":"D-IZT9","boss":false},{"state":"mobilizing","constellation":"Damadil","staging":"Perdan","boss":false},{"state":"mobilizing","constellation":"Ihilakken","staging":"Sakenta","boss":true},{"state":"mobilizing","constellation":"Homroon","staging":"Neda","boss":true},{"state":"withdrawing","constellation":"DS-M4Q","staging":"0EK-NJ","boss":true}],"systemkills":[{"name":"Mercomesier","ships":56,"ships_percent":100,"pods":1,"pods_percent":2},{"name":"V-3YG7","ships":28,"ships_percent":50,"pods":11,"pods_percent":20},{"name":"Hikkoken","ships":28,"ships_percent":50,"pods":5,"pods_percent":9}],"systemjumps":[{"name":"Perimeter","jumps":1843,"percent":100},{"name":"Jita","jumps":1540,"percent":84},{"name":"Urlen","jumps":1403,"percent":76}],"factions":[{"id":500001,"name":"caldari state","shortname":"caldari","systemscontrolled":7,"systemscontrolled_percent":7,"killsyesterday":116,"killsyesterday_percent":70},{"id":500002,"name":"minmatar republic","shortname":"minmatar","systemscontrolled":68,"systemscontrolled_percent":72,"killsyesterday":171,"killsyesterday_percent":103},{"id":500003,"name":"amarr empire","shortname":"amarr","systemscontrolled":2,"systemscontrolled_percent":2,"killsyesterday":125,"killsyesterday_percent":75},{"id":500004,"name":"gallente federation","shortname":"gallente","systemscontrolled":94,"systemscontrolled_percent":100,"killsyesterday":166,"killsyesterday_percent":100}],"commodities":[{"typeid":34,"typename":"tritanium","avgprice":575,"avgchange":0,"avghistory":[575,575,575,575,575,575,575,575,575,575,575,575,575,575,575,575,575,575,575,575,575,575,575,575]},{"typeid":35,"typename":"pyerite","avgprice":416,"avgchange":0,"avghistory":[416,416,416,416,416,416,416,416,416,416,416,416,416,416,416,416,416,416,416,416,416,416,416,416]},{"typeid":36,"typename":"mexallon","avgprice":6960,"avgchange":0,"avghistory":[6960,6960,6960,6960,6960,6960,6960,6960,6960,6960,6960,6960,6960,6960,6960,6960,6960,6960,6960,6960,6960,6960,6960,6960]},{"typeid":37,"typename":"isogen","avgprice":2688,"avgchange":0,"avghistory":[2688,2688,2688,2688,2688,2688,2688,2688,2688,2688,2688,2688,2688,2688,2688,2688,2688,2688,2688,2688,2688,2688,2688,2688]},{"typeid":38,"typename":"nocxium","avgprice":29882,"avgchange":0,"avghistory":[29882,29882,29882,29882,29882,29882,29882,29882,29882,29882,29882,29882,29882,29882,29882,29882,29882,29882,29882,29882,29882,29882,29882,29882]},{"typeid":39,"typename":"zydrine","avgprice":53263,"avgchange":0,"avghistory":[53263,53263,53263,53263,53263,53263,53263,53263,53263,53263,53263,53263,53263,53263,53263,53263,53263,53263,53263,53263,53263,53263,53263,53263]},{"typeid":40,"typename":"megacyte","avgprice":59036,"avgchange":0,"avghistory":[59036,59036,59036,59036,59036,59036,59036,59036,59036,59036,59036,59036,59036,59036,59036,59036,59036,59036,59036,59036,59036,59036,59036,59036]},{"typeid":16649,"typename":"technetium","avgprice":1681885,"avgchange":0,"avghistory":[1681885,1681885,1681885,1681885,1681885,1681885,1681885,1681885,1681885,1681885,1681885,1681885,1681885,1681885,1681885,1681885,1681885,1681885,1681885,1681885,1681885,1681885,1681885,1681885]}],"rmtitems":[{"typeid":44992,"typename":"plex","avgprice":279599972,"avgchange":0,"avghistory":[279599972,279599972,279599972,279599972,279599972,279599972,279599972,279599972,279599972,279599972,279599972,279599972,279599972,279599972,279599972,279599972,279599972,279599972,279599972,279599972,279599972,279599972,279599972,279599972]},{"typeid":40520,"typename":"skill injector","avgprice":73860566188,"avgchange":0,"avghistory":[73860566188,73860566188,73860566188,73860566188,73860566188,73860566188,73860566188,73860566188,73860566188,73860566188,73860566188,73860566188,73860566188,73860566188,73860566188,73860566188,73860566188,73860566188,73860566188,73860566188,73860566188,73860566188,73860566188,73860566188]}],"apistatusserver":true}
+{
+    "serverstatus": "",
+    "playersonline": 0,
+    "incursions": [],
+    "systemkills": [],
+    "systemjumps": [],
+    "factions": [
+        {
+            "id": 500001,
+            "name": "caldari state",
+            "shortname": "caldari",
+            "systemscontrolled": 0,
+            "systemscontrolled_percent": 0,
+            "killsyesterday": 0,
+            "killsyesterday_percent": 0
+        },
+        {
+            "id": 500002,
+            "name": "minmatar republic",
+            "shortname": "minmatar",
+            "systemscontrolled": 0,
+            "systemscontrolled_percent": 0,
+            "killsyesterday": 0,
+            "killsyesterday_percent": 0
+        },
+        {
+            "id": 500003,
+            "name": "amarr empire",
+            "shortname": "amarr",
+            "systemscontrolled": 0,
+            "systemscontrolled_percent": 0,
+            "killsyesterday": 0,
+            "killsyesterday_percent": 0
+        },
+        {
+            "id": 500004,
+            "name": "gallente federation",
+            "shortname": "gallente",
+            "systemscontrolled": 0,
+            "systemscontrolled_percent": 0,
+            "killsyesterday": 0,
+            "killsyesterday_percent": 0
+        }
+    ],
+    "commodities": [
+        {
+            "typeid": 34,
+            "typename": "tritanium",
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        },
+        {
+            "typeid": 35,
+            "typename": "pyerite",
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        },
+        {
+            "typeid": 36,
+            "typename": "mexallon",
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        },
+        {
+            "typeid": 37,
+            "typename": "isogen",
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        },
+        {
+            "typeid": 38,
+            "typename": "nocxium",
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        },
+        {
+            "typeid": 39,
+            "typename": "zydrine",
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        },
+        {
+            "typeid": 40,
+            "typename": "megacyte",
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        },
+        {
+            "typeid": 16649,
+            "typename": "technetium",
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        }
+    ],
+    "rmtitems": [
+        {
+            "typeid": 44992,
+            "typename": "plex",
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        },
+        {
+            "typeid": 40520,
+            "typename": "skill injector",
+            "avgprice": 0,
+            "avgchange": 0,
+            "avghistory": []
+        }
+    ],
+    "apistatusserver": true
+}

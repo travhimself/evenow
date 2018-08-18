@@ -62,10 +62,10 @@ var server = evenowexpressapp.listen(s.nodeport, function() {
             setInterval(getserverstatus, s.apicallinterval_status);
 
             getmarketdata();
-            setInterval(getmarketdata, s.apicallinterval_incursions);
+            setInterval(getmarketdata, s.apicallinterval_market);
 
             getincursions();
-            setInterval(getincursions, s.apicallinterval_market);
+            setInterval(getincursions, s.apicallinterval_incursions);
 
             getsystemkills();
             setInterval(getsystemkills, s.apicallinterval_systemkills);
@@ -184,7 +184,7 @@ var getmarketdata = function() {
                     // set average price as an integer (including hundreths places)
                     el.avgprice = Math.round(typeobj.average_price * 100);
 
-                    // add new history entry to the end of the array if we're at a log interval
+                    // add new history entry to the end of the array
                     el.avghistory.push(el.avgprice);
 
                     // calculate change over the last interval
