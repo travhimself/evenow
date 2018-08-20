@@ -11,12 +11,12 @@ var s = {
     sockettransmissioninteral: 1200000, // interval between broadcast to clients (rec: 1200000) (2min)
     datawriteinterval: 3600000, // how often data is logged to data.json (rec: 3600000) (1hour)
     apicallinterval_status: 600000, // interval between status data fetches (rec: 600000) (10min)
-    apicallinterval_market: 14400000, // interval between market data fetches (rec: 14400000) (4hours)
+    apicallinterval_market: 86400000, // interval between market data fetches (rec: 14400000) (24hours)
     apicallinterval_incursions: 600000, // interval between incursion data fetches (rec: 600000) (10min)
     apicallinterval_systemkills: 3600000, // interval between market data fetches (rec: 3600000) (1hour)
     apicallinterval_systemjumps: 3600000, // interval between market data fetches (rec: 3600000) (1hour)
     apicallinterval_factionwarfare: 21600000, // interval between faction warfare data fetches (rec: 3600000) (6hours)
-    marketdatamaxentries: 24 // number of history entries to show for each market item (dependent on apicallinterval_market)
+    marketdatamaxentries: 21 // number of history entries to show for each market item (dependent on apicallinterval_market)
 };
 
 

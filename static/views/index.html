@@ -114,7 +114,7 @@
         </section>
 
         <section id="market" ng-show="settings.viewmode === 'blend' || settings.viewmode === 'market'">
-            <h2>Market Prices <span>(last 96h)</span></h2>
+            <h2>Market Prices <span>(last 21d)</span></h2>
             <div class="block marketitem commodity" ng-repeat="item in data.commodities" enmarketitem></div>
             <div class="block marketitem rmt" ng-repeat="item in data.rmtitems" enmarketitem></div>
         </section>
